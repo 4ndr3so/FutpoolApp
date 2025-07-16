@@ -1,0 +1,110 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# ===== Global =====
+.DS_Store
+*.log
+*.env
+.env.local
+.env.*.local
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# OS
+Thumbs.db
+
+# ===== Node (React/React Native) =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# build artifacts
+/build/
+/dist/
+/.cache/
+.expo/
+.expo-shared/
+web-build/
+
+# ===== React Native (optional mobile folder) =====
+android/.gradle/
+android/app/build/
+android/build/
+ios/Pods/
+ios/build/
+*.xcworkspace
+*.xcodeproj
+*.xcuserdata
+
+# ===== Java / Spring Boot =====
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+*.db
+*.h2.db
+
+# Maven
+.mvn/
+!**/mvnw
+!**/mvnw.cmd
+
+# Gradle
+.gradle/
+build/
+!gradlew
+!gradlew.bat
+
+# ===== IntelliJ / Eclipse / NetBeans (Java IDEs) =====
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+/*.project
+/.classpath
+/.settings/
+/target/
+/bin/
+/out/
+
