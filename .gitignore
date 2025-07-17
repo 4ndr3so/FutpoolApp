@@ -1,69 +1,70 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
-
-# ===== Global =====
+# === Global ===
 .DS_Store
+Thumbs.db
 *.log
-*.env
-.env.local
-.env.*.local
+*.tmp
+*.bak
+*.swp
+*.orig
 
-# IDEs
+# === Environment Files ===
+.env
+.env.*
+!.env.example
+
+# === IDEs & Editors ===
 .idea/
 .vscode/
 *.iml
+*.ipr
+*.iws
 
-# OS
-Thumbs.db
+# === VS Code Workspace Settings ===
+*.code-workspace
 
-# ===== Node (React/React Native) =====
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-yarn.lock
+# === OS ===
+.DS_Store
 
-# build artifacts
-/build/
-/dist/
-/.cache/
-.expo/
-.expo-shared/
-web-build/
+# === Monorepo Structure ===
+/node_modules/  # Only if in root
 
-# ===== React Native (optional mobile folder) =====
+# === FRONTEND (Next.js - in /front) ===
+/front/.next/
+/front/out/
+/front/node_modules/
+/front/coverage/
+/front/.env
+/front/.env.*
+
+# Yarn/NPM
+/front/package-lock.json
+/front/yarn.lock
+/front/.pnp
+/front/.pnp.*
+
+# === BACKEND (Spring Boot - in /back) ===
+/back/target/
+/back/build/
+/back/.mvn/
+/back/.gradle/
+/back/*.log
+/back/*.jar
+/back/*.war
+/back/*.iml
+/back/.classpath
+/back/.project
+/back/.settings/
+/back/hs_err_pid*
+
+# Maven Wrapper files
+!/back/mvnw
+!/back/mvnw.cmd
+
+# Gradle Wrapper (if used)
+!/back/gradlew
+!/back/gradlew.bat
+
+# === React Native (Optional Mobile) ===
 android/.gradle/
 android/app/build/
 android/build/
@@ -73,38 +74,9 @@ ios/build/
 *.xcodeproj
 *.xcuserdata
 
-# ===== Java / Spring Boot =====
-target/
-*.class
-*.jar
-*.war
-*.ear
-*.log
-hs_err_pid*
-*.db
-*.h2.db
+# === Vercel / Hosting (Frontend) ===
+/front/.vercel
 
-# Maven
-.mvn/
-!**/mvnw
-!**/mvnw.cmd
-
-# Gradle
-.gradle/
-build/
-!gradlew
-!gradlew.bat
-
-# ===== IntelliJ / Eclipse / NetBeans (Java IDEs) =====
-*.swp
-*.bak
-*.tmp
-*.orig
-*~
-/*.project
-/.classpath
-/.settings/
-/target/
-/bin/
-/out/
-
+# === TypeScript build info (if used) ===
+*.tsbuildinfo
+/front/next-env.d.ts
