@@ -14,7 +14,7 @@ import com.futbolapp.back.models.User;
 import com.futbolapp.back.service.FirestoreUserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/public/users")
 public class UserController {
 
     @Autowired
