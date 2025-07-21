@@ -1,15 +1,13 @@
-"use client";
-
-import { useAuth } from "@/context/AuthContext";
-import { loginWithGoogle, logoutUser } from "@/firebase/authHelpers";
-
-
+// pages/login.tsx
+import { loginWithGoogle, logoutUser } from "../firebase/authHelpers";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const handleLogin = async () => {
-    await loginWithGoogle();
+    const jwt = await loginWithGoogle();
+    if (jwt) console.log("Firebase Token:", jwt);
   };
 
   const handleLogout = async () => {
@@ -18,11 +16,11 @@ export default function LoginPage() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h1>Login</h1>
+      <h1>Login Page</h1>
       {user ? (
         <>
-          <p>👤 {user.displayName}</p>
-          <p>📧 {user.email}</p>
+          <p>👤 Logged in as: {user.displayName}</p>
+          <p>📧 Email: {user.email}</p>
           <button onClick={handleLogout}>Logout</button>
         </>
       ) : (

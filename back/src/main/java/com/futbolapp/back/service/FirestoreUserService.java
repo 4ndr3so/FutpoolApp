@@ -13,17 +13,21 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class FirestoreUserService {
 
+     private final Firestore firestore;
+
+    public FirestoreUserService(Firestore firestore) {
+        this.firestore = firestore;
+    }
+    
     private static final String COLLECTION_NAME = "users";
 
     public String saveUser(User user) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> future = db.collection(COLLECTION_NAME).document(user.getId()).set(user);
+        ApiFuture<WriteResult> future = firestore.collection(COLLECTION_NAME).document(user.getId()).set(user);
         return future.get().getUpdateTime().toString();
     }
 
     public User getUser(String id) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
-        DocumentReference docRef = db.collection(COLLECTION_NAME).document(id);
+        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document(id);
         ApiFuture<DocumentSnapshot> future = docRef.get();
         DocumentSnapshot doc = future.get();
 
