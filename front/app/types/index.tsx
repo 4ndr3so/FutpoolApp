@@ -7,7 +7,7 @@ export type User = {
 };
 
 export type TournamentData = {
-  id: string;
+
   name: string;
   ownerId: string;
   rules: {

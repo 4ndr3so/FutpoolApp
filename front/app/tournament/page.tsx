@@ -1,4 +1,5 @@
 import MatchPrediction from "@/components/match/MatchPrediction";
+import TournamentForm from "@/components/tournament/TournamentForm";
 
 
 export default function TournamentsPage() {
@@ -6,6 +7,7 @@ export default function TournamentsPage() {
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Tournaments</h1>
       <MatchPrediction />
+      <TournamentForm />
     </div>
   );
 }
