@@ -1,4 +1,4 @@
-package com.futbolapp.dto;
+package com.futbolapp.back.dto;
 
 
 

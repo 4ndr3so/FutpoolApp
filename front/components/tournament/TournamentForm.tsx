@@ -2,34 +2,25 @@
 import React, { useState } from "react";
 import { TournamentData } from "@/app/types";
 import { useMutation } from "@tanstack/react-query";
+import { createTournament } from "@/services/tournamentApi";
+import { useCompetitions } from "@/hooks/useCompetitions";
 
 const TournamentForm: React.FC = () => {
     const [form, setForm] = useState({
         name: "",
+        selectedCompetitionId: "",
         ownerId: "qW6y6WWtedfX015TfI3F",
+        idCompetition: 0, // This will be set based on the selected competition
+        competitionName: "", // This will be set based on the selected competition
         pointsPerWin: 3,
         pointsPerDraw: 1,
         pointsPerExactScore: 5,
         allowPodiumPrediction: true,
         participants: "",
+
     });
 
-    const createTournament = async (tournament: TournamentData) => {
-        const response = await fetch("http://localhost:8080/api/tournaments", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(tournament),
-        });
-
-        if (!response.ok) {
-            const err = await response.json();
-            throw new Error(err.message || "Server error");
-        }
-
-        return response.json();
-    };
+    const { data: competitions, isLoading } = useCompetitions(); // ⬅️ fetch competitions
 
     const mutation = useMutation({
         mutationFn: createTournament,
@@ -41,17 +32,33 @@ const TournamentForm: React.FC = () => {
         },
     });
 
+
+
+
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const target = e.target as HTMLInputElement;
         const { name, value, type, checked } = target;
 
-        setForm((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : value,
-        }));
+        if (name === "selectedCompetitionId" && competitions) {
+            const selected = competitions.find(c => c.id.toString() === value);
+
+            setForm((prev) => ({
+                ...prev,
+                selectedCompetitionId: value,                         // UI-friendly
+                idCompetition: selected ? selected.id : 0,            // for Firestore
+                competitionName: selected ? selected.name : "",       // 🆕 if needed
+            }));
+        } else {
+            setForm((prev) => ({
+                ...prev,
+                [name]: type === "checkbox" ? checked : value,
+            }));
+        }
     };
+
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -81,11 +88,32 @@ const TournamentForm: React.FC = () => {
         <form onSubmit={handleSubmit} className="p-4 max-w-md mx-auto space-y-4">
             <h2 className="text-xl font-bold">Create Tournament</h2>
 
-            {/* tournament ID  must be automatically generated */}
+            {/* tournament ID  must be automatically taken depending of the tournament selected in the drop list */}
+            {/* Competition Select Dropdown */}
+            <label>
+                Select Competition
+                <select
+                    name="selectedCompetitionId"
+                    value={form.selectedCompetitionId}
+                    onChange={handleChange}
+                    className="w-full border p-2 rounded"
+                    required
+                >
+                    <option value="">-- Select --</option>
+                    {isLoading ? (
+                        <option disabled>Loading...</option>
+                    ) : (
+                        competitions?.map((comp) => (
+                            <option key={comp.id} value={comp.id}>
+                                {comp.name}
+                            </option>
+                        ))
+                    )}
+                </select>
+            </label>
 
 
-
-            <label htmlFor="name">Tournament Name</label>
+            <label htmlFor="name">Pronostic competition Name</label>
             <input
                 type="text"
                 name="name"
@@ -96,7 +124,7 @@ const TournamentForm: React.FC = () => {
                 required
             />
 
-            {/* owner ID must be taken for the logged-in user */}
+            {/* tournament selected in the drop list fetchet by the API */}
 
             <div className="grid grid-cols-2 gap-4">
                 <label >
