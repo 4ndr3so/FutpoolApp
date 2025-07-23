@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.futbolapp.dto.TournamentRequest;
+import com.futbolapp.back.dto.TournamentRequest;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.FieldValue;
@@ -29,6 +29,8 @@ public class TournamentController {
             Map<String, Object> tournamentData = new HashMap<>();
             tournamentData.put("name", request.getName());
             tournamentData.put("ownerId", request.getOwnerId());
+            tournamentData.put("idCompetition", request.getIdCompetition());
+            tournamentData.put("competitionName", request.getCompetitionName());
             tournamentData.put("rules", request.getRules());
             tournamentData.put("participants", request.getParticipants());
             tournamentData.put("createdAt", FieldValue.serverTimestamp());

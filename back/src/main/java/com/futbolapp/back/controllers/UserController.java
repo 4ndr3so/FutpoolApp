@@ -20,14 +20,14 @@ public class UserController {
     @Autowired
     private FirestoreUserService userService;
 
-    @PostMapping
-    public ResponseEntity<String> addUser(@RequestBody User user) throws Exception {
-        return ResponseEntity.ok(userService.saveUser(user));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable String id) throws Exception {
         return ResponseEntity.ok(userService.getUser(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<String> addUser(@RequestBody User user) throws Exception {
+        return ResponseEntity.ok(userService.saveUser(user));
     }
 
     @DeleteMapping("/{id}")
