@@ -2,13 +2,12 @@
 import React, { useState } from "react";
 import { TournamentData } from "@/app/types";
 import { useMutation } from "@tanstack/react-query";
-import { createTournament } from "@/services/tournamentApi";
+import { createTournament } from "@/services/api/tournamentApi";
 import { useCompetitions } from "@/hooks/useCompetitions";
 
 const TournamentForm: React.FC = () => {
     const [form, setForm] = useState({
         name: "",
-        selectedCompetitionId: "",
         ownerId: "qW6y6WWtedfX015TfI3F",
         idCompetition: 0, // This will be set based on the selected competition
         competitionName: "", // This will be set based on the selected competition
@@ -16,7 +15,7 @@ const TournamentForm: React.FC = () => {
         pointsPerDraw: 1,
         pointsPerExactScore: 5,
         allowPodiumPrediction: true,
-        participants: "",
+        participants: "", // This will be a comma-separated string of participant names
 
     });
 
@@ -25,7 +24,7 @@ const TournamentForm: React.FC = () => {
     const mutation = useMutation({
         mutationFn: createTournament,
         onSuccess: (data) => {
-            alert(`✅ Success: ${data.message}`);
+            alert(`✅ Success: ${data.data.message}`);
         },
         onError: (error: any) => {
             alert(`❌ Error: ${error.message}`);
@@ -41,12 +40,12 @@ const TournamentForm: React.FC = () => {
         const target = e.target as HTMLInputElement;
         const { name, value, type, checked } = target;
 
-        if (name === "selectedCompetitionId" && competitions) {
+        if (name === "idCompetition" && competitions) {
             const selected = competitions.find(c => c.id.toString() === value);
-
+            console.log(selected?.name, value,selected?.id)
             setForm((prev) => ({
                 ...prev,
-                selectedCompetitionId: value,                         // UI-friendly
+                      // UI-friendly
                 idCompetition: selected ? selected.id : 0,            // for Firestore
                 competitionName: selected ? selected.name : "",       // 🆕 if needed
             }));
@@ -67,16 +66,15 @@ const TournamentForm: React.FC = () => {
 
             name: form.name,
             ownerId: form.ownerId,
+            idCompetition: form.idCompetition,
+            competitionName: form.competitionName,
             rules: {
                 pointsPerWin: Number(form.pointsPerWin),
                 pointsPerDraw: Number(form.pointsPerDraw),
                 pointsPerExactScore: Number(form.pointsPerExactScore),
                 allowPodiumPrediction: form.allowPodiumPrediction,
             },
-            participants: form.participants
-                .split(",")
-                .map((p) => p.trim())
-                .filter((p) => p),
+            participants: [],
             createdAt: new Date(),
         };
 
@@ -93,8 +91,8 @@ const TournamentForm: React.FC = () => {
             <label>
                 Select Competition
                 <select
-                    name="selectedCompetitionId"
-                    value={form.selectedCompetitionId}
+                    name="idCompetition"
+                    value={form.idCompetition}
                     onChange={handleChange}
                     className="w-full border p-2 rounded"
                     required

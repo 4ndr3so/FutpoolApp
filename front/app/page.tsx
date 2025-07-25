@@ -1,23 +1,64 @@
 "use client";
 
+import WelcomComp from "@/components/general/WelcomComp";
+import TournamentGeneCompo from "@/components/tournament/TournamentGeneCompo";
+
 import { useAuth } from "@/context/AuthContext";
-import { loginWithGoogle, logoutUser } from "@/firebase/authHelpers";
+import { useTournamentsByIds } from "@/hooks/useTournamentsByIds";
+import { useTournamentById } from "@/services/api/tournamentApi";
+import { useUserById } from "@/services/api/userApi";
+
+import { RootState } from "@/store";
+import { setTournaments } from "@/store/slices/tournamentSlice";
+import { setUser } from "@/store/slices/userSlice";
+
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 
 export default function LoginPage() {
-  const { user } = useAuth();
+  const router = useRouter();
+  const { user: firebaseUser } = useAuth();
+  const user = useSelector((state: RootState) => state.user);
 
-  const handleLogin = async () => {
-    await loginWithGoogle();
-  };
 
-  const handleLogout = async () => {
-    await logoutUser();
-  };
+  const dispatch = useDispatch();
+  // Fetch user profile data using the user ID from Firebase
+  //romve the user id, just for testing purposes
+  const { data: userProfile, isLoading: userLoading } = useUserById(user?.uid || "9eJDlLZHSxUoHaF1ggynTq1pbJ93");
 
+  //change the data in redux store when userProfile changes
+  useEffect(() => {
+    if (userProfile) {
+      dispatch(setUser({
+        ...userProfile, // merges tournamentsOwn, tournamentsParticipant, etc.
+      }));
+    }
+  }, [userProfile]);
+  //fetch the user tournaments
+
+
+
+  const tournamentIds = userProfile?.tournamentsOwn || [];
+
+  const { data: tournaments, isLoading: loadingTournaments } = useTournamentsByIds(tournamentIds);
+
+  useEffect(() => {
+    if (tournaments) {
+      dispatch(setTournaments(tournaments));
+    }
+  }, [tournaments]);
+
+  function handleCreateTournament(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+    event.preventDefault();
+    // For now, just show an alert. Replace with navigation or modal logic as needed.
+    router.push("/");
+  }
   return (
-     
+
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r shadow-sm p-4">
@@ -35,40 +76,33 @@ export default function LoginPage() {
       {/* Main Content */}
       <main className="flex-1 p-6 space-y-6">
         {/* User Info Header */}
-        <header className="flex justify-between items-center bg-white p-4 rounded shadow">
-          <div>
-            <h1 className="text-2xl font-bold">Welcome, Juan</h1>
-            <p className="text-sm text-gray-500">Signed in as juan@example.com</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <img
-              src="https://i.pravatar.cc/40"
-              alt="User Avatar"
-              className="w-10 h-10 rounded-full"
-            />
-          </div>
-        </header>
+        {userLoading ? (
+          <p>Loading user information...</p>
+        ) : (
+          <WelcomComp
+            name={user?.name || "Guest"}
+            email={user?.email || "Not signed in"}
+            avatarUrl={firebaseUser?.photoURL || "https://i.pravatar.cc/40"}
+          />
+        )}
 
         {/* Tournament Summary */}
         <section className="bg-white p-6 rounded shadow">
           <h2 className="text-lg font-semibold mb-4">Tournament Overview</h2>
-          <div className="flex justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Active Tournament:</p>
-              <p className="text-xl font-bold">World Cup 2026</p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600">Your Points:</p>
-              <p className="text-xl font-bold text-blue-600">132</p>
-            </div>
-          </div>
+          {
+            loadingTournaments ? (
+              <p>Loading...</p>
+            ) : (
+              <TournamentGeneCompo tournaments={tournaments || []} />
+            )
+          }
         </section>
 
         {/* Tournament Actions */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded shadow">
             <h3 className="text-md font-semibold mb-2">Create Tournament</h3>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleCreateTournament}>
               + New Tournament
             </button>
           </div>
@@ -83,6 +117,6 @@ export default function LoginPage() {
         </section>
       </main>
     </div>
-  
+
   );
 }

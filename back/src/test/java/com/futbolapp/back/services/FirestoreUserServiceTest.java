@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.futbolapp.back.models.User;
+import com.futbolapp.back.dto.User;
 import com.futbolapp.back.repository.UserRepository;
 import com.futbolapp.back.service.FirestoreUserService;
 import com.google.cloud.firestore.DocumentSnapshot;

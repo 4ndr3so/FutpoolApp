@@ -1,17 +1,26 @@
 // store/slices/userSlice.ts
-import { User } from "@/app/types";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: User | null = null;
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { User } from "@/app/types";
+
+type UserState = User | null;
+
+const initialState: UserState = null as User | null;
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: () => null,
-    clearUser: () => null,
+    setUser(state, action: PayloadAction<User>) {
+      return { ...state, ...action.payload };
+    },
+    clearUser() {
+      return null;
+    },
   },
 });
+
+
 
 export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -2,7 +2,7 @@ package com.futbolapp.back.controller;
 
 
 import com.futbolapp.back.controllers.UserController;
-import com.futbolapp.back.models.User;
+import com.futbolapp.back.dto.User;
 import com.futbolapp.back.service.FirestoreUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

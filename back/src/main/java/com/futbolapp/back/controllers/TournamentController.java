@@ -1,8 +1,8 @@
 package com.futbolapp.back.controllers;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,44 +11,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.futbolapp.back.dto.TournamentRequest;
-import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.FieldValue;
-import com.google.cloud.firestore.Firestore;
-import com.google.firebase.cloud.FirestoreClient;
+import com.futbolapp.back.service.TournamentService;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
-@RequestMapping("/api/tournaments")
+@RequestMapping("/api/tournament")
 public class TournamentController {
 
-    @PostMapping
+    @Autowired
+    private TournamentService tournamentService;
+
+    @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createTournament(@RequestBody TournamentRequest request) {
         try {
-            Firestore db = FirestoreClient.getFirestore();
-
-            Map<String, Object> tournamentData = new HashMap<>();
-            tournamentData.put("name", request.getName());
-            tournamentData.put("ownerId", request.getOwnerId());
-            tournamentData.put("idCompetition", request.getIdCompetition());
-            tournamentData.put("competitionName", request.getCompetitionName());
-            tournamentData.put("rules", request.getRules());
-            tournamentData.put("participants", request.getParticipants());
-            tournamentData.put("createdAt", FieldValue.serverTimestamp());
-
-            // Add to collection and let Firestore generate ID
-            ApiFuture<DocumentReference> addedDocRef = db.collection("tournaments").add(tournamentData);
-            String generatedId = addedDocRef.get().getId();
-
-            // Optionally: update the document to include its ID
-            db.collection("tournaments").document(generatedId).update("id", generatedId);
-
-            return ResponseEntity.ok(Map.of(
-                "message", "Tournament created successfully",
-                "tournamentId", generatedId
-            ));
+            Map<String, String> result = tournamentService.createTournament(request);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("message", "Failed to create tournament: " + e.getMessage()));
         }
     }
+
+    @GetMapping("get/{id}")
+    public ResponseEntity<?> getTournament(@PathVariable String id) {
+        try {
+            Map<String, Object> tournament = tournamentService.getTournamentById(id);
+            return ResponseEntity.ok(tournament);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", e.getMessage()));
+        }
+    }
+
 }

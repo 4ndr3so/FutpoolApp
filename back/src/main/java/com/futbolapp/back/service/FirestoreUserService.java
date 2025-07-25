@@ -2,7 +2,8 @@ package com.futbolapp.back.service;
 
 
 
-import com.futbolapp.back.models.User;
+
+import com.futbolapp.back.dto.User;
 import com.futbolapp.back.repository.UserRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
