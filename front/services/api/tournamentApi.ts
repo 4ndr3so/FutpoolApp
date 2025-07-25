@@ -1,5 +1,5 @@
 // services/tournamentApi.ts
-import { TournamentData } from "@/app/types";
+import { MatchSummary, TournamentData } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 export const createTournament = async (tournament: TournamentData) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/create`, {
@@ -36,3 +36,15 @@ export const useTournamentById = (id: string) => {
     enabled: !!id, // only fetch if id is defined
   });
 };
+
+
+export const fetchMatchSummary = async (id: string): Promise<MatchSummary[]> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/matches/summary`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch match summary with ID: ${id}`);
+  }
+
+  return res.json(); // resolves to MatchSummary[]
+};
+

@@ -25,6 +25,7 @@ export type TournamentData = {
   createdAt: Date;
 };
 export type TeamScoreProps = {
+  status?: string;
   teamName: string;
   flagUrl: string;
   initialScore?: number;
@@ -36,4 +37,20 @@ export type Competition = {
     name: string;
     code: string;
     emblem: string;
+};
+
+export type ScoreDetail = {
+  home: number;
+  away: number;
+};
+
+export type MatchSummary = {
+  utcDate: string;
+  status: string;
+  homeTeamName: string;
+  homeTeamCrest: string;
+  awayTeamName: string;
+  awayTeamCrest: string;
+  winner: string;
+  fullTimeScore: ScoreDetail;
 };
