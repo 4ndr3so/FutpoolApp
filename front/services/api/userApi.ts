@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export async function saveUserToBackend(user: import("firebase/auth").User) {
   const body = {
-    id: user.uid,
+    uid: user.uid,
     username: user.displayName || "Anonymous",
     email: user.email || "",
     provider: user.providerData[0]?.providerId || "unknown",
@@ -12,7 +12,7 @@ export async function saveUserToBackend(user: import("firebase/auth").User) {
     
     
   };
-  console.log("Saving user to backend:", body.id);
+  console.log("Saving user to backend:", body.uid);
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users`, {
     method: "POST",
     headers: {

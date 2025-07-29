@@ -3,7 +3,7 @@ package com.futbolapp.back.dto;
 import lombok.Data;
 
 @Data
-public class Season {
+public class SeasonDTO {
     private int id;
     private String startDate;
     private String endDate;

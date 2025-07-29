@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 
 
 
@@ -10,10 +11,10 @@ export interface User {
     tournamentsParticipant: string[]; // same
 };
 export type TournamentData = {
-
+  id: string; // Firestore document ID
   name: string;
   ownerId: string;
-  idCompetition: number; // This will be set based on the selected competition
+  idCompetition: string; // This will be set based on the selected competition
   competitionName: string; // This will be set based on the selected competition
   rules: {
     pointsPerWin: number;
@@ -22,18 +23,19 @@ export type TournamentData = {
     allowPodiumPrediction: boolean;
   };
   participants: string[];
-  createdAt: Date;
+  createdAt: Timestamp ;
 };
-export type TeamScoreProps = {
-  status?: string;
+export type TeamScoreProps ={
+  status: string;
   teamName: string;
   flagUrl: string;
-  initialScore?: number;
-  onChange?: (score: number) => void;
+  score: number;
+  onChange: (score: number) => void;
 };
 
+
 export type Competition = {
-    id: number;
+    id: string;
     name: string;
     code: string;
     emblem: string;
@@ -45,6 +47,7 @@ export type ScoreDetail = {
 };
 
 export type MatchSummary = {
+  id: string;
   utcDate: string;
   status: string;
   homeTeamName: string;
@@ -54,3 +57,29 @@ export type MatchSummary = {
   winner: string;
   fullTimeScore: ScoreDetail;
 };
+
+export type Prediction = {
+  id?: string; // Firestore document ID, optional
+  userId: string;
+  tournamentId: string;
+  idCompetition: string;
+  matchId: string;
+  homeTeamScore: number;
+  awayTeamScore: number;
+  pointsAwarded: number;
+  evaluated: boolean;
+  createdAt: Date | string; // Can be a Firestore Timestamp, ISO string, or Date
+};
+
+/* Prediction Interface 
+ private String id; // Firestore document ID
+    private String idCompetition; 
+    private String userId;
+    private String tournamentId;
+    private String matchId;
+    private int homeTeamScore;
+    private int awayTeamScore;
+    private int pointsAwarded;
+    private boolean evaluated;
+    private Instant createdAt;
+*/

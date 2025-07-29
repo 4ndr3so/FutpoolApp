@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.futbolapp.back.client.CompetitionClient;
+import com.futbolapp.back.client.CompetitionAPIClient;
 import com.futbolapp.back.dto.Competition;
 import com.futbolapp.back.dto.CompetitionResponse;
 import com.futbolapp.back.service.CompetitionService;
@@ -20,7 +20,7 @@ import com.futbolapp.back.service.CompetitionService;
 public class CompetitionServiceTest {
 
     @Mock
-    private CompetitionClient competitionClient;
+    private CompetitionAPIClient competitionClient;
 
     @InjectMocks
     private CompetitionService competitionService;

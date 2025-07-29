@@ -6,16 +6,20 @@ import org.springframework.web.client.RestTemplate;
 
 import com.futbolapp.back.dto.CompetitionResponse;
 
+
 @Component
-public class CompetitionClient {
+public class CompetitionAPIClient {
 
     private final RestTemplate restTemplate;
 
-    public CompetitionClient(RestTemplateBuilder builder) {
+    public CompetitionAPIClient(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
     }
 
     public CompetitionResponse getAllCompetitions() {
-        return restTemplate.getForObject("http://localhost:3001/competitions", CompetitionResponse.class);
+        return restTemplate.getForObject(
+            "http://localhost:3001/competitionSummary",
+            CompetitionResponse.class
+        );
     }
 }

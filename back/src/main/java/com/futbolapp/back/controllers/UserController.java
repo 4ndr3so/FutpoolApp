@@ -27,9 +27,9 @@ public class UserController {
     @Autowired
     private FirestoreUserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable String id) throws Exception {
-        return ResponseEntity.ok(userService.getUser(id));
+    @GetMapping("/{uid}")
+    public ResponseEntity<User> getUser(@PathVariable String uid) throws Exception {
+        return ResponseEntity.ok(userService.getUser(uid));
     }
 
     @PostMapping
@@ -42,7 +42,7 @@ public class UserController {
 
             // Set the document with uid as ID and map the whole object
             db.collection("users")
-                    .document(userDto.getId()) // assuming `uid` is the primary user ID
+                    .document(userDto.getUid()) // assuming `uid` is the primary user ID
                     .set(userDto, SetOptions.merge());
 
             return ResponseEntity.ok(Map.of("message", "User saved successfully"));

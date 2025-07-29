@@ -43,7 +43,7 @@ public class UserControllerTest {
     @Test
     void testGetUser() throws Exception {
         User user = new User();
-        user.setId("user123");
+        user.setUid("user123");
         user.setUsername("testuser");
 
         when(userService.getUser("user123")).thenReturn(user);

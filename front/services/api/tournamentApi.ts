@@ -20,6 +20,7 @@ export const createTournament = async (tournament: TournamentData) => {
 
 // hooks/useTournamentById.ts
 export const fetchTournamentById = async (id: string): Promise<TournamentData> => {
+  console.log("Fetching tournament by ID:", id);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/get/${id}`);
   if (!res.ok) throw new Error("Failed to fetch tournament");
   return res.json();
