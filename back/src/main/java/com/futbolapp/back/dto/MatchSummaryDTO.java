@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class MatchSummaryDTO {
+    private String id;
     private String utcDate;
     private String status;
     private String homeTeamName;

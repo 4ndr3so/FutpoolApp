@@ -11,6 +11,7 @@ import { useUserById } from "@/services/api/userApi";
 import { RootState } from "@/store";
 import { setTournaments } from "@/store/slices/tournamentSlice";
 import { setUser } from "@/store/slices/userSlice";
+import { setTournamentSelected } from "@/store/slices/tournamentSelectedSlice";
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -43,7 +44,7 @@ export default function LoginPage() {
 
 
   const tournamentIds = userProfile?.tournamentsOwn || [];
-
+  
   const { data: tournaments, isLoading: loadingTournaments } = useTournamentsByIds(tournamentIds);
 
   useEffect(() => {
@@ -56,6 +57,19 @@ export default function LoginPage() {
     event.preventDefault();
     // For now, just show an alert. Replace with navigation or modal logic as needed.
     router.push("/");
+  }
+
+  function viewTournament(tournamentId: string) {
+
+    let selectedTournament = tournaments?.find(t => t.id === tournamentId);
+    console.log("Selected Tournament:", selectedTournament);//<------------------------
+    if (!selectedTournament) {
+      console.error("Tournament not found:", tournamentId);
+      return;
+    }
+    console.log("Selected Tournament ID:", tournamentId);//<------------------------
+    dispatch(setTournamentSelected(selectedTournament));
+    router.push(`/tournament/details/`);
   }
   return (
 
@@ -93,7 +107,7 @@ export default function LoginPage() {
             loadingTournaments ? (
               <p>Loading...</p>
             ) : (
-              <TournamentGeneCompo tournaments={tournaments || []} />
+              <TournamentGeneCompo tournaments={tournaments || []} viewTournament={viewTournament} />
             )
           }
         </section>

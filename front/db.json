@@ -1,7 +1,6 @@
 {
-    "competitions": {
+    "competitionSummary": {
         "count": 2,
-        "filters": {},
         "competitions": [
             {
                 "id": 2011,
@@ -11,7 +10,7 @@
                     "code": "DEU",
                     "flag": "https://crests.football-data.org/759.svg"
                 },
-                "name": "German 1",
+                "name": "Bundesliga",
                 "code": "DFB",
                 "type": "CUP",
                 "emblem": "https://crests.football-data.org/DFB_CUP.png",
@@ -27,383 +26,385 @@
                 "lastUpdated": "2025-08-20T09:21:19Z"
             },
             {
-            "id": 2150,
-            "area": {
-                "id": 2093,
-                "name": "Greece",
-                "code": "GRC",
-                "flag": "https://crests.football-data.org/775.svg"
-            },
-            "name": "Souper Kap Ellados",
-            "code": null,
-            "type": "LEAGUE",
-            "emblem": null,
-            "plan": "TIER_FOUR",
-            "currentSeason": {
-                "id": 684,
-                "startDate": "2007-10-31",
-                "endDate": "2007-10-31",
-                "currentMatchday": null,
-                "winner": null
-            },
-            "numberOfAvailableSeasons": 1,
-            "lastUpdated": "2021-02-05T07:21:43Z"
-        }
+                "id": 2150,
+                "area": {
+                    "id": 2093,
+                    "name": "Greece",
+                    "code": "GRC",
+                    "flag": "https://crests.football-data.org/775.svg"
+                },
+                "name": "Souper Kap Ellados",
+                "code": null,
+                "type": "LEAGUE",
+                "emblem": null,
+                "plan": "TIER_FOUR",
+                "currentSeason": {
+                    "id": 684,
+                    "startDate": "2007-10-31",
+                    "endDate": "2007-10-31",
+                    "currentMatchday": null,
+                    "winner": null
+                },
+                "numberOfAvailableSeasons": 1,
+                "lastUpdated": "2021-02-05T07:21:43Z"
+            }
         ]
     },
-    "filters": {
-        "season": "2025",
-        "matchday": "34"
-    },
-    "resultSet": {
-        "count": 9,
-        "first": "2025-02-10",
-        "last": "2026-01-15",
-        "played": 9
-    },
-    "competition": {
-        "id": 2002,
-        "name": "Bundesliga",
-        "code": "BL1",
-        "type": "LEAGUE",
-        "emblem": "https://crests.football-data.org/BL1.png"
-    },
-    "matches": [
-        {
-            "id": 1,
-            "area": {
-                "id": 2088,
-                "name": "Germany",
-                "code": "DEU",
-                "flag": "https://crests.football-data.org/759.svg"
-            },
-            "competition": {
-                "id": 2002,
-                "name": "Bundesliga",
-                "code": "BL1",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/BL1.png"
-            },
-            "season": {
-                "id": 742,
-                "startDate": "2025-02-10",
-                "endDate": "2026-01-15",
-                "currentMatchday": 6,
-                "stages": [
-                    "REGULAR_SEASON"
-                ]
-            },
-            "utcDate": "2025-03-05T13:30:00Z",
-            "status": "FINISHED",
-            "matchday": 1,
-            "venue": "Allianz Arena",
-            "homeTeam": {
-                "id": 5,
-                "name": "FC Bayern München",
-                "tla": "FCB",
-                "crest": "https://crests.football-data.org/5.svg",
-                "leagueRank": 1,
-                "formation": "4-2-3-1"
-            },
-            "awayTeam": {
-                "id": 18,
-                "name": "VfL Wolfsburg",
-                "tla": "WOB",
-                "crest": "https://crests.football-data.org/18.svg",
-                "leagueRank": 8,
-                "formation": "4-3-3"
-            },
-            "score": {
-                "winner": "HOME_TEAM",
-                "fullTime": {
-                    "home": 3,
-                    "away": 1
-                },
-                "halfTime": {
-                    "home": 1,
-                    "away": 0
-                }
-            }
+    "matchesSummary": {
+        "filters": {
+            "season": "2025",
+            "matchday": "34"
         },
-        {
-            "id": 2,
-            "area": {
-                "id": 2088,
-                "name": "Germany",
-                "code": "DEU",
-                "flag": "https://crests.football-data.org/759.svg"
-            },
-            "competition": {
-                "id": 2002,
-                "name": "Bundesliga",
-                "code": "BL1",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/BL1.png"
-            },
-            "season": {
-                "id": 742,
-                "startDate": "2025-02-10",
-                "endDate": "2026-01-15",
-                "currentMatchday": 6,
-                "stages": [
-                    "REGULAR_SEASON"
-                ]
-            },
-            "utcDate": "2025-05-10T16:00:00Z",
-            "status": "FINISHED",
-            "matchday": 2,
-            "venue": "Signal Iduna Park",
-            "homeTeam": {
-                "id": 4,
-                "name": "Borussia Dortmund",
-                "tla": "BVB",
-                "crest": "https://crests.football-data.org/4.png",
-                "leagueRank": 2,
-                "formation": "4-1-4-1"
-            },
-            "awayTeam": {
-                "id": 15,
-                "name": "Eintracht Frankfurt",
-                "tla": "SGE",
-                "crest": "https://crests.football-data.org/15.svg",
-                "leagueRank": 10,
-                "formation": "3-4-2-1"
-            },
-            "score": {
-                "winner": "DRAW",
-                "fullTime": {
-                    "home": 2,
-                    "away": 2
-                },
-                "halfTime": {
-                    "home": 1,
-                    "away": 1
-                }
-            }
+        "resultSet": {
+            "count": 9,
+            "first": "2025-02-10",
+            "last": "2026-01-15",
+            "played": 9
         },
-        {
-            "id": 3,
-            "area": {
-                "id": 2088,
-                "name": "Germany",
-                "code": "DEU",
-                "flag": "https://crests.football-data.org/759.svg"
-            },
-            "competition": {
-                "id": 2002,
-                "name": "Bundesliga",
-                "code": "BL1",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/BL1.png"
-            },
-            "season": {
-                "id": 742,
-                "startDate": "2025-02-10",
-                "endDate": "2026-01-15",
-                "currentMatchday": 6,
-                "stages": [
-                    "REGULAR_SEASON"
-                ]
-            },
-            "utcDate": "2025-07-20T14:00:00Z",
-            "status": "FINISHED",
-            "matchday": 3,
-            "venue": "BayArena",
-            "homeTeam": {
-                "id": 3,
-                "name": "Bayer Leverkusen",
-                "tla": "B04",
-                "crest": "https://crests.football-data.org/3.svg",
-                "leagueRank": 3,
-                "formation": "4-3-3"
-            },
-            "awayTeam": {
-                "id": 6,
-                "name": "RB Leipzig",
-                "tla": "RBL",
-                "crest": "https://crests.football-data.org/6.svg",
-                "leagueRank": 4,
-                "formation": "3-4-2-1"
-            },
-            "score": {
-                "winner": "AWAY_TEAM",
-                "fullTime": {
-                    "home": 1,
-                    "away": 2
-                },
-                "halfTime": {
-                    "home": 1,
-                    "away": 1
-                }
-            }
+        "competition": {
+            "id": 2011,
+            "name": "Bundesliga",
+            "code": "BL1",
+            "type": "LEAGUE",
+            "emblem": "https://crests.football-data.org/BL1.png"
         },
-        {
-            "id": 4,
-            "area": {
-                "id": 2088,
-                "name": "Germany",
-                "code": "DEU",
-                "flag": "https://crests.football-data.org/759.svg"
-            },
-            "competition": {
-                "id": 2002,
-                "name": "Bundesliga",
-                "code": "BL1",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/BL1.png"
-            },
-            "season": {
-                "id": 742,
-                "startDate": "2025-02-10",
-                "endDate": "2026-01-15",
-                "currentMatchday": 6,
-                "stages": [
-                    "REGULAR_SEASON"
-                ]
-            },
-            "utcDate": "2025-09-05T16:00:00Z",
-            "status": "SCHEDULED",
-            "matchday": 4,
-            "venue": "Mercedes-Benz Arena",
-            "homeTeam": {
-                "id": 16,
-                "name": "VfB Stuttgart",
-                "tla": "VFB",
-                "crest": "https://crests.football-data.org/16.svg",
-                "leagueRank": 14,
-                "formation": "4-2-3-1"
-            },
-            "awayTeam": {
-                "id": 7,
-                "name": "Borussia Mönchengladbach",
-                "tla": "BMG",
-                "crest": "https://crests.football-data.org/7.svg",
-                "leagueRank": 9,
-                "formation": "4-3-3"
-            },
-            "score": {
-                "winner": null,
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            }
-        },
-        {
-            "id": 5,
-            "area": {
-                "id": 2088,
-                "name": "Germany",
-                "code": "DEU",
-                "flag": "https://crests.football-data.org/759.svg"
-            },
-            "competition": {
-                "id": 2002,
-                "name": "Bundesliga",
-                "code": "BL1",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/BL1.png"
-            },
-            "season": {
-                "id": 742,
-                "startDate": "2025-02-10",
-                "endDate": "2026-01-15",
-                "currentMatchday": 6,
-                "stages": [
-                    "REGULAR_SEASON"
-                ]
-            },
-            "utcDate": "2025-10-02T13:30:00Z",
-            "status": "SCHEDULED",
-            "matchday": 5,
-            "venue": "PreZero Arena",
-            "homeTeam": {
-                "id": 2,
-                "name": "TSG 1899 Hoffenheim",
-                "tla": "TSG",
-                "crest": "https://crests.football-data.org/2.svg",
-                "leagueRank": 11,
-                "formation": "3-5-2"
-            },
-            "awayTeam": {
-                "id": 17,
-                "name": "1. FSV Mainz 05",
-                "tla": "M05",
-                "crest": "https://crests.football-data.org/17.svg",
-                "leagueRank": 12,
-                "formation": "4-4-2"
-            },
-            "score": {
-                "winner": null,
-                "fullTime": {
-                    "home": null,
-                    "away": null
-                },
-                "halfTime": {
-                    "home": null,
-                    "away": null
-                }
-            }
-        },
-        {
-            "id": 6,
-            "area": {
-                "id": 2088,
-                "name": "Germany",
-                "code": "DEU",
-                "flag": "https://crests.football-data.org/759.svg"
-            },
-            "competition": {
-                "id": 2002,
-                "name": "Bundesliga",
-                "code": "BL1",
-                "type": "LEAGUE",
-                "emblem": "https://crests.football-data.org/BL1.png"
-            },
-            "season": {
-                "id": 742,
-                "startDate": "2025-02-10",
-                "endDate": "2026-01-15",
-                "currentMatchday": 6,
-                "stages": [
-                    "REGULAR_SEASON"
-                ]
-            },
-            "utcDate": "2025-12-01T17:45:00Z",
-            "status": "SCHEDULED",
-            "matchday": 6,
-            "venue": "RheinEnergieStadion",
-            "homeTeam": {
+        "matches": [
+            {
                 "id": 1,
-                "name": "1. FC Köln",
-                "tla": "KOE",
-                "crest": "https://crests.football-data.org/1.svg",
-                "leagueRank": 7,
-                "formation": "4-1-4-1"
-            },
-            "awayTeam": {
-                "id": 19,
-                "name": "Arminia Bielefeld",
-                "tla": "DSC",
-                "crest": "https://crests.football-data.org/19.svg",
-                "leagueRank": 17,
-                "formation": "5-4-1"
-            },
-            "score": {
-                "winner": null,
-                "fullTime": {
-                    "home": null,
-                    "away": null
+                "area": {
+                    "id": 2088,
+                    "name": "Germany",
+                    "code": "DEU",
+                    "flag": "https://crests.football-data.org/759.svg"
                 },
-                "halfTime": {
-                    "home": null,
-                    "away": null
+                "competition": {
+                    "id": 2002,
+                    "name": "Bundesliga",
+                    "code": "BL1",
+                    "type": "LEAGUE",
+                    "emblem": "https://crests.football-data.org/BL1.png"
+                },
+                "season": {
+                    "id": 742,
+                    "startDate": "2025-02-10",
+                    "endDate": "2026-01-15",
+                    "currentMatchday": 6,
+                    "stages": [
+                        "REGULAR_SEASON"
+                    ]
+                },
+                "utcDate": "2025-03-05T13:30:00Z",
+                "status": "FINISHED",
+                "matchday": 1,
+                "venue": "Allianz Arena",
+                "homeTeam": {
+                    "id": 5,
+                    "name": "FC Bayern München",
+                    "tla": "FCB",
+                    "crest": "https://crests.football-data.org/5.svg",
+                    "leagueRank": 1,
+                    "formation": "4-2-3-1"
+                },
+                "awayTeam": {
+                    "id": 18,
+                    "name": "VfL Wolfsburg",
+                    "tla": "WOB",
+                    "crest": "https://crests.football-data.org/18.svg",
+                    "leagueRank": 8,
+                    "formation": "4-3-3"
+                },
+                "score": {
+                    "winner": "HOME_TEAM",
+                    "fullTime": {
+                        "home": 3,
+                        "away": 1
+                    },
+                    "halfTime": {
+                        "home": 1,
+                        "away": 0
+                    }
+                }
+            },
+            {
+                "id": 2,
+                "area": {
+                    "id": 2088,
+                    "name": "Germany",
+                    "code": "DEU",
+                    "flag": "https://crests.football-data.org/759.svg"
+                },
+                "competition": {
+                    "id": 2002,
+                    "name": "Bundesliga",
+                    "code": "BL1",
+                    "type": "LEAGUE",
+                    "emblem": "https://crests.football-data.org/BL1.png"
+                },
+                "season": {
+                    "id": 742,
+                    "startDate": "2025-02-10",
+                    "endDate": "2026-01-15",
+                    "currentMatchday": 6,
+                    "stages": [
+                        "REGULAR_SEASON"
+                    ]
+                },
+                "utcDate": "2025-05-10T16:00:00Z",
+                "status": "FINISHED",
+                "matchday": 2,
+                "venue": "Signal Iduna Park",
+                "homeTeam": {
+                    "id": 4,
+                    "name": "Borussia Dortmund",
+                    "tla": "BVB",
+                    "crest": "https://crests.football-data.org/4.png",
+                    "leagueRank": 2,
+                    "formation": "4-1-4-1"
+                },
+                "awayTeam": {
+                    "id": 15,
+                    "name": "Eintracht Frankfurt",
+                    "tla": "SGE",
+                    "crest": "https://crests.football-data.org/15.svg",
+                    "leagueRank": 10,
+                    "formation": "3-4-2-1"
+                },
+                "score": {
+                    "winner": "DRAW",
+                    "fullTime": {
+                        "home": 2,
+                        "away": 2
+                    },
+                    "halfTime": {
+                        "home": 1,
+                        "away": 1
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "area": {
+                    "id": 2088,
+                    "name": "Germany",
+                    "code": "DEU",
+                    "flag": "https://crests.football-data.org/759.svg"
+                },
+                "competition": {
+                    "id": 2002,
+                    "name": "Bundesliga",
+                    "code": "BL1",
+                    "type": "LEAGUE",
+                    "emblem": "https://crests.football-data.org/BL1.png"
+                },
+                "season": {
+                    "id": 742,
+                    "startDate": "2025-02-10",
+                    "endDate": "2026-01-15",
+                    "currentMatchday": 6,
+                    "stages": [
+                        "REGULAR_SEASON"
+                    ]
+                },
+                "utcDate": "2025-07-20T14:00:00Z",
+                "status": "FINISHED",
+                "matchday": 3,
+                "venue": "BayArena",
+                "homeTeam": {
+                    "id": 3,
+                    "name": "Bayer Leverkusen",
+                    "tla": "B04",
+                    "crest": "https://crests.football-data.org/3.svg",
+                    "leagueRank": 3,
+                    "formation": "4-3-3"
+                },
+                "awayTeam": {
+                    "id": 6,
+                    "name": "RB Leipzig",
+                    "tla": "RBL",
+                    "crest": "https://crests.football-data.org/6.svg",
+                    "leagueRank": 4,
+                    "formation": "3-4-2-1"
+                },
+                "score": {
+                    "winner": "AWAY_TEAM",
+                    "fullTime": {
+                        "home": 1,
+                        "away": 2
+                    },
+                    "halfTime": {
+                        "home": 1,
+                        "away": 1
+                    }
+                }
+            },
+            {
+                "id": 4,
+                "area": {
+                    "id": 2088,
+                    "name": "Germany",
+                    "code": "DEU",
+                    "flag": "https://crests.football-data.org/759.svg"
+                },
+                "competition": {
+                    "id": 2002,
+                    "name": "Bundesliga",
+                    "code": "BL1",
+                    "type": "LEAGUE",
+                    "emblem": "https://crests.football-data.org/BL1.png"
+                },
+                "season": {
+                    "id": 742,
+                    "startDate": "2025-02-10",
+                    "endDate": "2026-01-15",
+                    "currentMatchday": 6,
+                    "stages": [
+                        "REGULAR_SEASON"
+                    ]
+                },
+                "utcDate": "2025-09-05T16:00:00Z",
+                "status": "SCHEDULED",
+                "matchday": 4,
+                "venue": "Mercedes-Benz Arena",
+                "homeTeam": {
+                    "id": 16,
+                    "name": "VfB Stuttgart",
+                    "tla": "VFB",
+                    "crest": "https://crests.football-data.org/16.svg",
+                    "leagueRank": 14,
+                    "formation": "4-2-3-1"
+                },
+                "awayTeam": {
+                    "id": 7,
+                    "name": "Borussia Mönchengladbach",
+                    "tla": "BMG",
+                    "crest": "https://crests.football-data.org/7.svg",
+                    "leagueRank": 9,
+                    "formation": "4-3-3"
+                },
+                "score": {
+                    "winner": null,
+                    "fullTime": {
+                        "home": null,
+                        "away": null
+                    },
+                    "halfTime": {
+                        "home": null,
+                        "away": null
+                    }
+                }
+            },
+            {
+                "id": 5,
+                "area": {
+                    "id": 2088,
+                    "name": "Germany",
+                    "code": "DEU",
+                    "flag": "https://crests.football-data.org/759.svg"
+                },
+                "competition": {
+                    "id": 2002,
+                    "name": "Bundesliga",
+                    "code": "BL1",
+                    "type": "LEAGUE",
+                    "emblem": "https://crests.football-data.org/BL1.png"
+                },
+                "season": {
+                    "id": 742,
+                    "startDate": "2025-02-10",
+                    "endDate": "2026-01-15",
+                    "currentMatchday": 6,
+                    "stages": [
+                        "REGULAR_SEASON"
+                    ]
+                },
+                "utcDate": "2025-10-02T13:30:00Z",
+                "status": "SCHEDULED",
+                "matchday": 5,
+                "venue": "PreZero Arena",
+                "homeTeam": {
+                    "id": 2,
+                    "name": "TSG 1899 Hoffenheim",
+                    "tla": "TSG",
+                    "crest": "https://crests.football-data.org/2.svg",
+                    "leagueRank": 11,
+                    "formation": "3-5-2"
+                },
+                "awayTeam": {
+                    "id": 17,
+                    "name": "1. FSV Mainz 05",
+                    "tla": "M05",
+                    "crest": "https://crests.football-data.org/17.svg",
+                    "leagueRank": 12,
+                    "formation": "4-4-2"
+                },
+                "score": {
+                    "winner": null,
+                    "fullTime": {
+                        "home": null,
+                        "away": null
+                    },
+                    "halfTime": {
+                        "home": null,
+                        "away": null
+                    }
+                }
+            },
+            {
+                "id": 6,
+                "area": {
+                    "id": 2088,
+                    "name": "Germany",
+                    "code": "DEU",
+                    "flag": "https://crests.football-data.org/759.svg"
+                },
+                "competition": {
+                    "id": 2002,
+                    "name": "Bundesliga",
+                    "code": "BL1",
+                    "type": "LEAGUE",
+                    "emblem": "https://crests.football-data.org/BL1.png"
+                },
+                "season": {
+                    "id": 742,
+                    "startDate": "2025-02-10",
+                    "endDate": "2026-01-15",
+                    "currentMatchday": 6,
+                    "stages": [
+                        "REGULAR_SEASON"
+                    ]
+                },
+                "utcDate": "2025-12-01T17:45:00Z",
+                "status": "SCHEDULED",
+                "matchday": 6,
+                "venue": "RheinEnergieStadion",
+                "homeTeam": {
+                    "id": 1,
+                    "name": "1. FC Köln",
+                    "tla": "KOE",
+                    "crest": "https://crests.football-data.org/1.svg",
+                    "leagueRank": 7,
+                    "formation": "4-1-4-1"
+                },
+                "awayTeam": {
+                    "id": 19,
+                    "name": "Arminia Bielefeld",
+                    "tla": "DSC",
+                    "crest": "https://crests.football-data.org/19.svg",
+                    "leagueRank": 17,
+                    "formation": "5-4-1"
+                },
+                "score": {
+                    "winner": null,
+                    "fullTime": {
+                        "home": null,
+                        "away": null
+                    },
+                    "halfTime": {
+                        "home": null,
+                        "away": null
+                    }
                 }
             }
-        }
-    ]
+        ]
+    }
 }

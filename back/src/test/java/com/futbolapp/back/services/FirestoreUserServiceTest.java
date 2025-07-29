@@ -31,7 +31,7 @@ public class FirestoreUserServiceTest {
     @Test
     void testGetUserReturnsUser() throws Exception {
         User mockUser = new User();
-        mockUser.setId("user123");
+        mockUser.setUid("user123");
         mockUser.setUsername("testuser");
 
         DocumentSnapshot snapshot = mock(DocumentSnapshot.class);
@@ -41,7 +41,7 @@ public class FirestoreUserServiceTest {
 
         User result = userService.getUser("user123");
 
-        assertEquals("user123", result.getId());
+        assertEquals("user123", result.getUid());
         assertEquals("testuser", result.getUsername());
     }
 }

@@ -5,6 +5,8 @@ import { fetchTournamentById } from "@/services/api/tournamentApi";
 
 
 export const useTournamentsByIds = (ids: string[]) => {
+
+  
   return useQuery({
     queryKey: ["tournaments", ids],
     queryFn: async () => {

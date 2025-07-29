@@ -1,19 +1,26 @@
 import React from 'react'
 import TournamentInfo from './TournamentInfo';
 import { useUser } from '@/hooks/useUser';
+import { TournamentData } from '@/app/types';
 
 type Props = {
-    tournaments?: any[]; // Replace with actual type if known
+    tournaments?: TournamentData[]; // data tournament
+    viewTournament?: (tournamentId: string) => void;
 }
 
-export default function TournamentGeneCompo({tournaments}: Props) {
+export default function TournamentGeneCompo({tournaments, viewTournament}: Props) {
 
 
 
   return (
     <div>
       {tournaments?.map((tournament, index) => (
-        <TournamentInfo key={index} {...tournament} />
+        <TournamentInfo key={index}
+          competitionName={tournament.competitionName}
+          idCompetition={tournament.idCompetition}
+          createdAt={tournament.createdAt}
+          tournamentId={tournament.id}
+          viewTournament={viewTournament}  />
       ))}
     </div>
   )

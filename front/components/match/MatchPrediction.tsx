@@ -1,12 +1,21 @@
 "use client";
 import { MatchSummary } from "@/app/types";
 import TeamScore from "./TeamScore";
+
+import { useState, useEffect } from "react";
+
+
 type MatchPredictionProps = {
   matchSummary: MatchSummary;
+  onUserPredictionChange: (matchId: string, prediction: { home: number; away: number }) => void;
 };
 
-export default function MatchPrediction({ matchSummary }: MatchPredictionProps) {
+export default function MatchPrediction({
+  matchSummary,
+  onUserPredictionChange,
+}: MatchPredictionProps) {
   const {
+    id,
     utcDate,
     status,
     homeTeamName,
@@ -16,9 +25,15 @@ export default function MatchPrediction({ matchSummary }: MatchPredictionProps) 
     fullTimeScore,
   } = matchSummary;
 
+  const [homeScore, setHomeScore] = useState(0);
+  const [awayScore, setAwayScore] = useState(0);
+
+  useEffect(() => {
+    onUserPredictionChange(id, { home: homeScore, away: awayScore });
+  }, [homeScore, awayScore]);
+
   return (
     <div className="relative bg-gray-100 p-4 rounded space-y-4">
-      {/* Status Badge and Date */}
       <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded shadow">
         {status} - {utcDate}
       </div>
@@ -30,23 +45,22 @@ export default function MatchPrediction({ matchSummary }: MatchPredictionProps) 
           status={status}
           teamName={homeTeamName}
           flagUrl={homeTeamCrest}
-          onChange={(score) => console.log(`${homeTeamName} score:`, score)}
+          score={homeScore}
+          onChange={setHomeScore}
         />
 
-        {/* Result Display */}
-        {
-          status === "FINISHED" && (
-            <div className="text-xl font-semibold text-gray-700">
-              {fullTimeScore?.home} : {fullTimeScore?.away}
-            </div>
-          )
-        }
+        {status === "FINISHED" && (
+          <div className="text-xl font-semibold text-gray-700">
+            {fullTimeScore.home} : {fullTimeScore.away}
+          </div>
+        )}
 
         <TeamScore
           status={status}
           teamName={awayTeamName}
           flagUrl={awayTeamCrest}
-          onChange={(score) => console.log(`${awayTeamName} score:`, score)}
+          score={awayScore}
+          onChange={setAwayScore}
         />
       </div>
     </div>

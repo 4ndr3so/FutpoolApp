@@ -1,30 +1,33 @@
 package com.futbolapp.back.service;
 
-import java.util.Arrays;
+
+import com.futbolapp.back.client.MatchAPIClient;
+import com.futbolapp.back.dto.MatchDTO;
+import com.futbolapp.back.dto.MatchResponseDTO;
+import com.futbolapp.back.dto.MatchSummaryDTO;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import com.futbolapp.back.dto.MatchDTO;
-import com.futbolapp.back.dto.MatchSummaryDTO;
-
 @Service
 public class MatchService {
-    // This class will contain methods related to match operations
-    // such as fetching match details, updating scores, etc.
-    private final RestTemplate restTemplate = new RestTemplate();
-    private static final String MATCHES_URL = "http://localhost:3001/matches";
+
+    private final MatchAPIClient matchClient;
+
+    public MatchService(MatchAPIClient matchClient) {
+        this.matchClient = matchClient;
+    }
 
     public List<MatchDTO> getAllMatches() {
-        MatchDTO[] matches = restTemplate.getForObject(MATCHES_URL, MatchDTO[].class);
-        return Arrays.asList(matches);
+        MatchResponseDTO response = matchClient.fetchMatches();
+        return response != null ? response.getMatches() : List.of();
     }
 
     public List<MatchSummaryDTO> getMatchSummaries() {
         return getAllMatches().stream()
                 .map(match -> new MatchSummaryDTO(
+                        match.getId(),
                         match.getUtcDate(),
                         match.getStatus(),
                         match.getHomeTeam().getName(),

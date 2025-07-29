@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class MatchDTO {
+    private String id;
     private String utcDate;
     private String status;
     private int matchday;

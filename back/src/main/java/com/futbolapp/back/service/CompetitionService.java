@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.futbolapp.back.client.CompetitionClient;
+import com.futbolapp.back.client.CompetitionAPIClient;
 import com.futbolapp.back.dto.Competition;
 
 @Service
 public class CompetitionService {
 
-    private final CompetitionClient competitionClient;
+    private final CompetitionAPIClient competitionClient;
 
-    public CompetitionService(CompetitionClient competitionClient) {
+    public CompetitionService(CompetitionAPIClient competitionClient) {
         this.competitionClient = competitionClient;
     }
 
