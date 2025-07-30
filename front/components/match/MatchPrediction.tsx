@@ -7,11 +7,13 @@ import { useState, useEffect } from "react";
 
 type MatchPredictionProps = {
   matchSummary: MatchSummary;
+  score: { home: number; away: number };
   onUserPredictionChange: (matchId: string, prediction: { home: number; away: number }) => void;
 };
 
 export default function MatchPrediction({
   matchSummary,
+  score,
   onUserPredictionChange,
 }: MatchPredictionProps) {
   const {
@@ -45,7 +47,7 @@ export default function MatchPrediction({
           status={status}
           teamName={homeTeamName}
           flagUrl={homeTeamCrest}
-          score={homeScore}
+          score={score.home}
           onChange={setHomeScore}
         />
 
@@ -59,7 +61,7 @@ export default function MatchPrediction({
           status={status}
           teamName={awayTeamName}
           flagUrl={awayTeamCrest}
-          score={awayScore}
+          score={score.away}
           onChange={setAwayScore}
         />
       </div>

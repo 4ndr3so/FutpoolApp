@@ -4,7 +4,7 @@ import { Timestamp } from "firebase/firestore";
 
 export interface User {
     uid: string;
-    name: string;
+    username: string;
     email: string;
     provider: string;
     tournamentsOwn: string[]; // or fetch from Firestore later

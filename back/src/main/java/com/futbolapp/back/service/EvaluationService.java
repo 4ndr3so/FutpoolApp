@@ -1,88 +1,106 @@
 package com.futbolapp.back.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.futbolapp.back.client.MatchAPIClient;
+import com.futbolapp.back.dto.MatchDTO;
+import com.futbolapp.back.dto.MatchResponseDTO;
 import com.futbolapp.back.dto.MatchSummaryDTO;
 import com.futbolapp.back.dto.PredictionDTO;
 import com.futbolapp.back.dto.TournamentDTO;
 import com.futbolapp.back.dto.TournamentRulesDTO;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.SetOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-
-// @Service
+@Service
 public class EvaluationService {
 
-    private final Firestore db = FirestoreClient.getFirestore();
-    private final RestTemplate restTemplate;
+    private final MatchService matchService;
 
-    @Autowired
-    public EvaluationService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public EvaluationService(MatchService matchService) {
+        this.matchService = matchService;
     }
 
+    public List<PredictionDTO> evaluateAndReturnPredictions(String tournamentId)
     
-    public void evaluatePredictions(String tournamentId) throws ExecutionException, InterruptedException {
-        // 1. Get tournament info
-        DocumentSnapshot tournamentSnap = db.collection("tournaments").document(tournamentId).get().get();
+            throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        DocumentSnapshot tournamentSnap = db.collection("tournaments")
+                .document(tournamentId).get().get();
         TournamentDTO tournament = tournamentSnap.toObject(TournamentDTO.class);
 
-        if (tournament == null) throw new RuntimeException("Tournament not found");
+        if (tournament == null)
+            throw new RuntimeException("Tournament not found");
 
-        // 2. Get predictions for this tournament
-        Query query = db.collection("predictions").whereEqualTo("tournamentId", tournamentId);
-        List<QueryDocumentSnapshot> predictionDocs = query.get().get().getDocuments();
+        List<QueryDocumentSnapshot> predictionDocs = db.collection("predictions")
+                .whereEqualTo("tournamentId", tournamentId)
+                .get().get().getDocuments();
 
-        // 3. Fetch real matches from external API
-        MatchSummaryDTO[] realMatches = restTemplate.getForObject(
-            "http://localhost:3001/matches", MatchSummaryDTO[].class);
+        System.out.println(predictionDocs.size()+" "+predictionDocs.stream().map(doc -> doc.getId()).collect(Collectors.joining(", ")) 
+        + " predictions found for tournament " + tournamentId);
+        List<MatchSummaryDTO> realMatches = matchService.getMatchSummaries();
+        if (realMatches == null || realMatches.isEmpty())
+            throw new RuntimeException("Match results not available");
 
-        if (realMatches == null) throw new RuntimeException("Match results not available");
+        Map<String, MatchSummaryDTO> matchMap = realMatches.stream()
+                .collect(Collectors.toMap(MatchSummaryDTO::getId, m -> m));
 
-        Map<String, MatchSummaryDTO> matchMap = new HashMap<>();
-        for (MatchSummaryDTO match : realMatches) {
-            matchMap.put(match.getUtcDate(), match); // matchId is utcDate in this example
-        }
-
-        // 4. Evaluate predictions and update scores
+        System.out.println("Match summaries loaded: " + matchMap.size()+ " "+matchMap.keySet().stream().collect(Collectors.joining(", "))+
+                " for tournament " + tournamentId);
         Map<String, Integer> userTotalPoints = new HashMap<>();
+        List<PredictionDTO> evaluatedPredictions = new ArrayList<>();
 
         for (QueryDocumentSnapshot doc : predictionDocs) {
             PredictionDTO prediction = doc.toObject(PredictionDTO.class);
             MatchSummaryDTO match = matchMap.get(prediction.getMatchId());
 
-            if (match == null || !"FINISHED".equals(match.getStatus())) continue;
+            if (match == null || !"FINISHED".equals(match.getStatus()))
+                continue;
 
             int points = calculatePoints(prediction, match, tournament.getRules());
             userTotalPoints.merge(prediction.getUserId(), points, Integer::sum);
 
-            db.collection("predictions").document(doc.getId()).update(
-                Map.of("pointsAwarded", points, "evaluated", true)
-            );
+            prediction.setPointsAwarded(points);
+            prediction.setEvaluated(true);
+
+            db.collection("predictions").document(doc.getId()).set(prediction, SetOptions.merge());
+            evaluatedPredictions.add(prediction);
         }
 
-        // 5. Update participant scores in tournament
         for (Map.Entry<String, Integer> entry : userTotalPoints.entrySet()) {
             db.collection("tournaments")
-              .document(tournamentId)
-              .update("participants." + entry.getKey(), entry.getValue());
+                    .document(tournamentId)
+                    .update("participants." + entry.getKey(), entry.getValue());
         }
+
+        return evaluatedPredictions;
     }
 
     private int calculatePoints(PredictionDTO prediction, MatchSummaryDTO match, TournamentRulesDTO rules) {
         boolean exact = prediction.getHomeTeamScore() == match.getFullTimeScore().getHome() &&
-                        prediction.getAwayTeamScore() == match.getFullTimeScore().getAway();
+                prediction.getAwayTeamScore() == match.getFullTimeScore().getAway();
 
         String predictedWinner = getWinner(prediction.getHomeTeamScore(), prediction.getAwayTeamScore());
         String realWinner = match.getWinner();
 
-        if (exact) return rules.getPointsPerExactScore();
-        if ("DRAW".equals(predictedWinner) && "DRAW".equals(realWinner)) return rules.getPointsPerDraw();
-        if (predictedWinner.equals(realWinner)) return rules.getPointsPerWin();
+        if (exact)
+            return rules.getPointsPerExactScore();
+        if ("DRAW".equals(predictedWinner) && "DRAW".equals(realWinner))
+            return rules.getPointsPerDraw();
+        if (predictedWinner.equals(realWinner))
+            return rules.getPointsPerWin();
 
         return 0;
     }
@@ -90,6 +108,4 @@ public class EvaluationService {
     private String getWinner(int home, int away) {
         return home > away ? "HOME_TEAM" : away > home ? "AWAY_TEAM" : "DRAW";
     }
-
-
 }

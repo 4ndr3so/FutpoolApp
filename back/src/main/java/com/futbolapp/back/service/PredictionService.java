@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -16,7 +17,8 @@ public class PredictionService {
 
     private static final String COLLECTION_NAME = "predictions";
 
-    public List<PredictionDTO> getPredictions(String userId, String tournamentId, String matchId) throws ExecutionException, InterruptedException {
+    public List<PredictionDTO> getPredictions(String userId, String tournamentId, String matchId)
+            throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
         CollectionReference predictionsRef = db.collection(COLLECTION_NAME);
 
@@ -45,19 +47,24 @@ public class PredictionService {
         return result;
     }
 
-     public String savePrediction(PredictionDTO prediction) throws Exception {
+
+
+    public String savePrediction(PredictionDTO prediction) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 
-        // Set creation time
+        // ✅ Generate unique document ID
+        String docId = prediction.getUserId() + "_" + prediction.getTournamentId() + "_" + prediction.getMatchId();
+
+        // ✅ Set createdAt if not already set
         if (prediction.getCreatedAt() == null) {
             prediction.setCreatedAt(Instant.now());
         }
 
-        // Default values
-        prediction.setEvaluated(false);
-        prediction.setPointsAwarded(0);
+        // ✅ Save prediction (create or update, no duplicates)
+        ApiFuture<WriteResult> future = db.collection("predictions")
+                .document(docId)
+                .set(prediction, SetOptions.merge());
 
-        ApiFuture<DocumentReference> future = db.collection(COLLECTION_NAME).add(prediction);
-        return future.get().getId();
+        return future.get().getUpdateTime().toString();
     }
 }

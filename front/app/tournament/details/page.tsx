@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import MatchPrediction from "@/components/match/MatchPrediction";
 import { useMatchSummary } from "@/hooks/useMatchSum";
 import PointsPerMatch from "@/components/tournament/PointsPerMatch";
@@ -9,6 +9,7 @@ import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { MatchSummary } from "@/app/types";
+import { useEvaluationByTournament } from "@/hooks/useEvaluationByTournament";
 
 const MatchDetails = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -16,6 +17,8 @@ const MatchDetails = () => {
   const idCompetition = "w0OkZslXLw3ZXr85sGAQ";
 
   const { data, isLoading, error } = useMatchSummary(idCompetition); // fallback optional
+
+  const { data: predictions, isLoading: loadPredic, error: errorPrediction } = useEvaluationByTournament(idCompetition);
 
 
   const { mutate: savePrediction, isPending: isSaving } = useSavePrediction();
@@ -31,6 +34,19 @@ const MatchDetails = () => {
     }));
   };
 
+  //update predictions when data changes
+  //print predictions from the dataBase
+  const enrichedMatches = useMemo(() => {
+    if (!data) return [];
+
+    return data.map((match) => {
+      const prediction = predictions?.find((pred) => pred.matchId === match.id);
+      return {
+        ...match,
+        userPrediction: prediction ?? null,
+      };
+    });
+  }, [data, predictions]);
 
 
   const handlePredictionSave = (match: MatchSummary) => {
@@ -39,7 +55,7 @@ const MatchDetails = () => {
 
 
     // if (!userScore || !user?.uid || !selectedTournament?.id || !selectedTournament.idCompetition) return;
-    if (!userScore  || !user?.uid || !selectedTournament?.id ) return;
+    if (!userScore || !user?.uid || !selectedTournament?.id || !selectedTournament.idCompetition) return;
     console.log(
       // selectedTournament?.id,
       //  selectedTournament?.idCompetition,
@@ -49,14 +65,15 @@ const MatchDetails = () => {
 
     savePrediction({
       userId: user?.uid,
-      idCompetition: "2011",
-      tournamentId: "w0OkZslXLw3ZXr85sGAQ",
+      idCompetition: selectedTournament.idCompetition,
+      tournamentId: selectedTournament?.id,
       matchId: match.id,
       homeTeamScore: userScore.home,
       awayTeamScore: userScore.away,
     });
   };
 
+  console.log("Enriched Matches:", enrichedMatches);
   const buttonClass = classNames(
     "px-4 py-2 rounded font-semibold transition duration-200 text-white",
     {
@@ -72,8 +89,20 @@ const MatchDetails = () => {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold mb-4"> {`Tournament: ${selectedTournament?.name || "Unknown"}`}</h2>
-      {data.map((match) => {
-        const userScore = userPredictions[match.id] || { home: 0, away: 0 };
+      <p> {`${predictions?.length} predictions made`}</p>
+      {enrichedMatches.map((match) => {
+        //const userScore = userPredictions[match.id] || { home: 0, away: 0 };
+
+        const isFinished = match.status === "FINISHED";
+        const prediction = match.userPrediction;
+
+        const homeScore = isFinished
+          ? prediction?.homeTeamScore ?? 0
+          : userPredictions[match.id]?.home ?? 0;
+
+        const awayScore = isFinished
+          ? prediction?.awayTeamScore ?? 0
+          : userPredictions[match.id]?.away ?? 0;
 
         return (
           <div
@@ -85,16 +114,18 @@ const MatchDetails = () => {
               onUserPredictionChange={(matchId, score) =>
                 handlePredictionChange(matchId, score)
               }
+              score={{ home: homeScore, away: awayScore }}
             />
-
-            <PointsPerMatch
-              predictionScore={userScore}
-              realScore={{
-                home: match.fullTimeScore.home,
-                away: match.fullTimeScore.away,
-              }}
-              points={3}
-            />
+            {match.status == "FINISHED" &&
+              <PointsPerMatch
+                predictionScore={{ home: homeScore, away: awayScore }}
+                realScore={{
+                  home: match.fullTimeScore.home,
+                  away: match.fullTimeScore.away,
+                }}
+                points={prediction?.pointsAwarded ?? 0}
+              />
+            }
             {match.status !== "FINISHED" && (
               <button
                 className={buttonClass}

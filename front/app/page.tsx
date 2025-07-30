@@ -6,7 +6,7 @@ import TournamentGeneCompo from "@/components/tournament/TournamentGeneCompo";
 import { useAuth } from "@/context/AuthContext";
 import { useTournamentsByIds } from "@/hooks/useTournamentsByIds";
 import { useTournamentById } from "@/services/api/tournamentApi";
-import { useUserById } from "@/services/api/userApi";
+
 
 import { RootState } from "@/store";
 import { setTournaments } from "@/store/slices/tournamentSlice";
@@ -16,6 +16,7 @@ import { setTournamentSelected } from "@/store/slices/tournamentSelectedSlice";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useUserById } from "@/hooks/useUser";
 
 
 
@@ -94,7 +95,7 @@ export default function LoginPage() {
           <p>Loading user information...</p>
         ) : (
           <WelcomComp
-            name={user?.name || "Guest"}
+            name={user?.username || "Guest"}
             email={user?.email || "Not signed in"}
             avatarUrl={firebaseUser?.photoURL || "https://i.pravatar.cc/40"}
           />
