@@ -6,11 +6,13 @@ import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 
 import { auth } from "@/firebase/firebaseClient";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
-import { saveUserToFirestore } from "@/lib/FireStoreUser";
-import { saveUserToBackend } from "@/services/api/userApi";
+
+import { apiFetchUserById, saveUserToBackend } from "@/services/api/userApi";
+import { User } from "../types";
 
 
 const LoginPage = () => {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -18,21 +20,29 @@ const LoginPage = () => {
   const dispatch = useDispatch();
 
   const handleAfterLogin = async (user: import("firebase/auth").User) => {
-    await saveUserToBackend(user);
+    let existingUser: User | null = null;
 
-    const userData = {
-      uid: user.uid,
-      name: user.displayName || "Anonymous",
-      email: user.email || "No email",
-      provider: user.providerData[0].providerId,
-      tournamentsOwn: [], // Initialize with empty arrays
-      tournamentsParticipant: [], // Initialize with empty arrays
-    };
-    // ✅ Dispatch to Redux
-    dispatch(setUser(userData));
+  try {
+    existingUser = await apiFetchUserById(user.uid);
+  } catch (err) {
+    console.warn("User not found, proceeding to create:", err);
+  }
 
-    router.push("/");
+  const userData: User = {
+    uid: user.uid,
+    username: user.displayName || "Anonymous",
+    email: user.email || "No email",
+    provider: user.providerData[0].providerId,
+    tournamentsOwn: existingUser?.tournamentsOwn ?? [],
+    tournamentsParticipant: existingUser?.tournamentsParticipant ?? [],
   };
+
+  dispatch(setUser(userData));
+  await saveUserToBackend(userData);
+
+  router.push("/");
+};
+
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();

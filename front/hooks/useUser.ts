@@ -1,12 +1,17 @@
 // hooks/useCompetitions.ts
 
 
-import { useUserById } from "@/services/api/userApi";
+import { User } from "@/app/types";
+import { apiFetchUserById } from "@/services/api/userApi";
+import { useQuery } from "@tanstack/react-query";
 
 
 
 
-export const useUser = (userId: string) => {
-    //other logic if needed
-    return useUserById(userId);
+export const useUserById = (userId: string) => {
+  return useQuery<User>({
+    queryKey: ["user", userId],
+    queryFn: () => apiFetchUserById(userId),
+    enabled: !!userId,
+  });
 };
