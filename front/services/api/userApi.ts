@@ -1,5 +1,8 @@
-import { User } from "@/app/types";
+import { User } from "@/types";
+
 import { useQuery } from "@tanstack/react-query";
+
+import { auth } from "@/firebase/firebaseClient";
 
 export async function saveUserToBackend(user: {
   uid: string;
@@ -9,10 +12,16 @@ export async function saveUserToBackend(user: {
   tournamentsOwn?: string[];
   tournamentsParticipant?: string[];
 }) {
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error("User not authenticated");
+
+  const idToken = await currentUser.getIdToken(); // 🔐 Get ID token
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${idToken}`, // ✅ Add the token here
     },
     body: JSON.stringify(user),
   });
@@ -27,10 +36,19 @@ export async function saveUserToBackend(user: {
 
 
 
-export async function apiFetchUserById(userId: string): Promise<User> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/${userId}`);
-  
-  if (!res.ok) throw new Error("Failed to fetch user");
 
+export const apiFetchUserById = async (uid: string): Promise<User> => {
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error("User not authenticated");
+
+  const idToken = await currentUser.getIdToken();
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/${uid}`, {
+    headers: {
+      "Authorization": `Bearer ${idToken}`,
+    },
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch user");
   return res.json();
-}
+};

@@ -1,5 +1,6 @@
 package com.futbolapp.back.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class TournamentController {
     @Autowired
     private TournamentService tournamentService;
 
+    // 🔹 Create a new tournament and store participants in subcollection
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createTournament(@RequestBody TournamentRequest request) {
         try {
@@ -36,7 +38,8 @@ public class TournamentController {
         }
     }
 
-    @GetMapping("get/{id}")
+    // 🔹 Get tournament data by ID (main document)
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getTournament(@PathVariable String id) {
         try {
             Map<String, Object> tournament = tournamentService.getTournamentById(id);
@@ -47,4 +50,17 @@ public class TournamentController {
         }
     }
 
+    // 🔹 (NEW) Get all participants for a tournament
+    @GetMapping("/{tournamentId}/participants")
+    public ResponseEntity<?> getParticipants(@PathVariable String tournamentId) {
+        try {
+            List<Map<String, Object>> participants = tournamentService.getTournamentParticipants(tournamentId);
+            return ResponseEntity.ok(participants);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Failed to fetch participants: " + e.getMessage()));
+        }
+    }
+
+    
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import TournamentInfo from './TournamentInfo';
 import { useUser } from '@/hooks/useUser';
-import { TournamentData } from '@/app/types';
+import { TournamentData } from '@/types';
 
 type Props = {
     tournaments?: TournamentData[]; // data tournament

@@ -17,7 +17,7 @@ export default function TournamentInfo({ competitionName, idCompetition, created
   return new Date(timestampObj.seconds * 1000); // nanos ignored unless needed
 }
 
-  console.log()
+
   return (
     <div>
       <p className="text-sm text-gray-600">Competition Name: {competitionName || "Unknown"}</p>

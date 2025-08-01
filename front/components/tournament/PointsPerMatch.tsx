@@ -41,9 +41,10 @@ function PointsPerMatch({ predictionScore, realScore, points }: Props) {
           </span>
         </p>
       </div>
-      <div className={resultClass}>
+      { 
+        <div className={resultClass}>
         Points Awarded: {points}
-      </div>
+      </div>}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // hooks/useCompetitions.ts
 
 
-import { User } from "@/app/types";
+import { User } from "@/types";
 import { apiFetchUserById } from "@/services/api/userApi";
 import { useQuery } from "@tanstack/react-query";
 

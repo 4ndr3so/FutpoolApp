@@ -1,7 +1,7 @@
 // components/TeamScore.tsx
 "use client";
 
-import { TeamScoreProps } from "@/app/types";
+import { TeamScoreProps } from "@/types";
 import classNames from "classnames";
 
 export default function TeamScore({

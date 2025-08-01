@@ -1,51 +1,70 @@
 // services/tournamentApi.ts
-import { MatchSummary, TournamentData } from "@/app/types";
+import { MatchSummary, Participant, TournamentData } from "@/types";
+import { fetchWithAuth } from "@/utils/fetchWithAuth";
 import { useQuery } from "@tanstack/react-query";
-export const createTournament = async (tournament: TournamentData) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/create`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(tournament),
-    });
 
-    if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.message || "Server error");
-    }
+// api/tournament.ts
 
-    return response.json();
+
+// 🔹 Create a tournament
+export const createTournament = async (tournament: TournamentData): Promise<{ tournamentId: string }> => {
+  const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(tournament),
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || "Server error");
+  }
+
+  return response.json();
 };
 
-// hooks/useTournamentById.ts
+// 🔹 Fetch tournament by ID
 export const fetchTournamentById = async (id: string): Promise<TournamentData> => {
-  console.log("Fetching tournament by ID:", id);
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/get/${id}`);
+  const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/get/${id}`);
   if (!res.ok) throw new Error("Failed to fetch tournament");
   return res.json();
 };
 
-export const useTournamentById = (id: string) => {
-  return useQuery({
-    queryKey: ["tournament", id],
-    queryFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/get/${id}`);
-      if (!res.ok) throw new Error("Failed to fetch tournament");
-      return res.json();
-    },
-    enabled: !!id, // only fetch if id is defined
-  });
-};
-
-
+// 🔹 Fetch match summaries
 export const fetchMatchSummary = async (id: string): Promise<MatchSummary[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/matches/summary`);
+  const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/matches/summary`);
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch match summary with ID: ${id}`);
+    throw new Error(`Failed to fetch match summary for competition ID: ${id}`);
   }
 
-  return res.json(); // resolves to MatchSummary[]
+  return res.json(); // Expected to resolve to MatchSummary[]
 };
 
+
+
+export const fetchTournamentsByParticipantId = async (participantId: string): Promise<TournamentData[]> => {
+  const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/participant/${participantId}`);
+  if (!res.ok) throw new Error("Failed to fetch tournaments by participant ID");
+  return res.json();
+};
+
+export const fetchTournamentsByIds = async (ids: string[]): Promise<TournamentData[]> => {
+  const promises = ids.map(async (id) => {
+    const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/get/${id}`);
+    if (!res.ok) throw new Error(`Failed to fetch tournament ${id}`);
+    return res.json();
+  });
+
+  return Promise.all(promises);
+};
+
+// hooks/fetchScoreboard.ts
+
+
+export const fetchScoreboard = async (tournamentId: string): Promise<Participant[]> => {
+  const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournament/${tournamentId}/participants`);
+  if (!res.ok) throw new Error("Failed to fetch scoreboard");
+  return res.json();
+};

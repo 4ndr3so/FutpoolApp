@@ -8,21 +8,40 @@ import { useSavePrediction } from "@/hooks/useSavePrediction";
 import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { MatchSummary } from "@/app/types";
+import { MatchSummary } from "@/types";
 import { useEvaluationByTournament } from "@/hooks/useEvaluationByTournament";
+import { useRouter } from "next/navigation";
+import Scoreboard from "@/components/tournament/Scoreboard";
+import { useAuth } from "@/context/AuthContext";
 
 const MatchDetails = () => {
+  const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
   const selectedTournament = useSelector((state: RootState) => state.tournamentSelected);
-  const idCompetition = "w0OkZslXLw3ZXr85sGAQ";
+  const idCompetition = selectedTournament?.id;
+  // Ensure user is authenticated
+   const { user:userAuth, loading } = useAuth();
 
+
+  useEffect(() => {
+    if (!loading && !userAuth) {
+      router.push("/login");
+    }
+  }, [loading, userAuth]);
+
+  if (loading) return <div>Loading...</div>;
+
+  //check if it has a tournament id
+  if (!idCompetition || !user) {
+    router.push("/");
+    return null;
+  }
   const { data, isLoading, error } = useMatchSummary(idCompetition); // fallback optional
 
-  const { data: predictions, isLoading: loadPredic, error: errorPrediction } = useEvaluationByTournament(idCompetition);
-
+  const { data: predictions, isLoading: loadPredic, error: errorPrediction } = useEvaluationByTournament(idCompetition, user?.uid);
 
   const { mutate: savePrediction, isPending: isSaving } = useSavePrediction();
-
+  console.log("Predictions:", predictions);
   const [userPredictions, setUserPredictions] = useState<
     Record<string, { home: number; away: number }>
   >({});
@@ -89,6 +108,8 @@ const MatchDetails = () => {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold mb-4"> {`Tournament: ${selectedTournament?.name || "Unknown"}`}</h2>
+      {<Scoreboard tournamentId={selectedTournament?.id} />
+      }
       <p> {`${predictions?.length} predictions made`}</p>
       {enrichedMatches.map((match) => {
         //const userScore = userPredictions[match.id] || { home: 0, away: 0 };
@@ -116,7 +137,7 @@ const MatchDetails = () => {
               }
               score={{ home: homeScore, away: awayScore }}
             />
-            {match.status == "FINISHED" &&
+            {match.status == "FINISHED" && prediction &&
               <PointsPerMatch
                 predictionScore={{ home: homeScore, away: awayScore }}
                 realScore={{

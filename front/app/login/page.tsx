@@ -6,43 +6,45 @@ import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 
 import { auth } from "@/firebase/firebaseClient";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
-
+import { useAuth } from "@/context/AuthContext"; // ✅ make sure this is imported at the top
 import { apiFetchUserById, saveUserToBackend } from "@/services/api/userApi";
-import { User } from "../types";
-
+import { User } from "../../types";
 
 const LoginPage = () => {
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
+  const { user: firebaseUser, loading } = useAuth(); // ✅ use hooks always at the top
 
   const handleAfterLogin = async (user: import("firebase/auth").User) => {
     let existingUser: User | null = null;
 
-  try {
-    existingUser = await apiFetchUserById(user.uid);
-  } catch (err) {
-    console.warn("User not found, proceeding to create:", err);
-  }
+    try {
+      existingUser = await apiFetchUserById(user.uid);
+    } catch (err) {
+      console.warn("User not found, proceeding to create:", err);
+    }
 
-  const userData: User = {
-    uid: user.uid,
-    username: user.displayName || "Anonymous",
-    email: user.email || "No email",
-    provider: user.providerData[0].providerId,
-    tournamentsOwn: existingUser?.tournamentsOwn ?? [],
-    tournamentsParticipant: existingUser?.tournamentsParticipant ?? [],
+    const userData: User = {
+      uid: user.uid,
+      username: user.displayName || "Anonymous",
+      email: user.email || "No email",
+      provider: user.providerData[0].providerId,
+      tournamentsOwn: existingUser?.tournamentsOwn ?? [],
+      tournamentsParticipant: existingUser?.tournamentsParticipant ?? [],
+    };
+
+    dispatch(setUser(userData));
+    await saveUserToBackend(userData);
+
+    const idToken = await user.getIdToken();
+    sessionStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("token", idToken);
+
+    router.push("/tournament");
   };
-
-  dispatch(setUser(userData));
-  await saveUserToBackend(userData);
-
-  router.push("/");
-};
-
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +62,11 @@ const LoginPage = () => {
     await handleAfterLogin(result.user);
   };
 
+  if (loading) return <div>Loading...</div>;
+  if (firebaseUser) {
+    router.push("/tournament");
+    return <div>Redirecting...</div>;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">

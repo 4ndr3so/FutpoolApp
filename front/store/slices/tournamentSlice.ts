@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TournamentData } from "@/app/types";
+import { TournamentData } from "@/types";
 
 type TournamentState = TournamentData[];
 

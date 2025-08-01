@@ -1,15 +1,18 @@
 "use client";
 import React, { useState } from "react";
-import { TournamentData } from "@/app/types";
+import { TournamentData } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { createTournament } from "@/services/api/tournamentApi";
 import { useCompetitions } from "@/hooks/useCompetitions";
+import { Timestamp } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const TournamentForm: React.FC = () => {
     const [form, setForm] = useState({
         name: "",
-        ownerId: "qW6y6WWtedfX015TfI3F",
-        idCompetition: 0, // This will be set based on the selected competition
+        ownerId: "",
+        idCompetition: "", // This will be set based on the selected competition
         competitionName: "", // This will be set based on the selected competition
         pointsPerWin: 3,
         pointsPerDraw: 1,
@@ -19,12 +22,13 @@ const TournamentForm: React.FC = () => {
 
     });
 
+    const user = useSelector((state: RootState) => state.user);
     const { data: competitions, isLoading } = useCompetitions(); // ⬅️ fetch competitions
 
     const mutation = useMutation({
         mutationFn: createTournament,
         onSuccess: (data) => {
-            alert(`✅ Success: ${data.data.message}`);
+            alert(`✅ Success: ${data.tournamentId} created!`);
         },
         onError: (error: any) => {
             alert(`❌ Error: ${error.message}`);
@@ -42,11 +46,11 @@ const TournamentForm: React.FC = () => {
 
         if (name === "idCompetition" && competitions) {
             const selected = competitions.find(c => c.id.toString() === value);
-            console.log(selected?.name, value,selected?.id)
+            console.log(selected?.name, value, selected?.id)
             setForm((prev) => ({
                 ...prev,
-                      // UI-friendly
-                idCompetition: selected ? selected.id : 0,            // for Firestore
+                // UI-friendly
+                idCompetition: selected ? String(selected.id) : "",            // for Firestore
                 competitionName: selected ? selected.name : "",       // 🆕 if needed
             }));
         } else {
@@ -62,10 +66,15 @@ const TournamentForm: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const tournament: TournamentData = {
+        if (!user?.uid) {
+            alert("User is not authenticated");
+            return;
+        }
 
+        const tournament: TournamentData = {
+            id: "", // Firestore will auto-generate this
             name: form.name,
-            ownerId: form.ownerId,
+            ownerId: user.uid, // ✅ inject from Redux here
             idCompetition: form.idCompetition,
             competitionName: form.competitionName,
             rules: {
@@ -74,12 +83,11 @@ const TournamentForm: React.FC = () => {
                 pointsPerExactScore: Number(form.pointsPerExactScore),
                 allowPodiumPrediction: form.allowPodiumPrediction,
             },
-            participants: [],
-            createdAt: new Date(),
+            participants: [user.uid], // Optionally add owner as first participant
+            createdAt: Timestamp.fromDate(new Date()),
         };
 
         mutation.mutate(tournament);
-
     };
 
     return (

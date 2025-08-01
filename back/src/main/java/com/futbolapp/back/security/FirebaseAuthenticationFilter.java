@@ -18,6 +18,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
 @Component
 public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
 
@@ -39,12 +40,10 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
 
-            // Puedes poner al usuario autenticado en el contexto de Spring Security
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(decodedToken.getUid(), null, List.of());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         } catch (FirebaseAuthException e) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return;

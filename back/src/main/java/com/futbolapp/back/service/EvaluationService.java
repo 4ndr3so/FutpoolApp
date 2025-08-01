@@ -32,8 +32,8 @@ public class EvaluationService {
         this.matchService = matchService;
     }
 
-    public List<PredictionDTO> evaluateAndReturnPredictions(String tournamentId)
-    
+    public List<PredictionDTO> evaluateAndReturnPredictions(String tournamentId, String userId)
+
             throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 
@@ -46,10 +46,12 @@ public class EvaluationService {
 
         List<QueryDocumentSnapshot> predictionDocs = db.collection("predictions")
                 .whereEqualTo("tournamentId", tournamentId)
+                .whereEqualTo("userId", userId)
                 .get().get().getDocuments();
 
-        System.out.println(predictionDocs.size()+" "+predictionDocs.stream().map(doc -> doc.getId()).collect(Collectors.joining(", ")) 
-        + " predictions found for tournament " + tournamentId);
+        System.out.println(predictionDocs.size() + " "
+                + predictionDocs.stream().map(doc -> doc.getId()).collect(Collectors.joining(", "))
+                + " predictions found for tournament " + tournamentId);
         List<MatchSummaryDTO> realMatches = matchService.getMatchSummaries();
         if (realMatches == null || realMatches.isEmpty())
             throw new RuntimeException("Match results not available");
@@ -57,7 +59,8 @@ public class EvaluationService {
         Map<String, MatchSummaryDTO> matchMap = realMatches.stream()
                 .collect(Collectors.toMap(MatchSummaryDTO::getId, m -> m));
 
-        System.out.println("Match summaries loaded: " + matchMap.size()+ " "+matchMap.keySet().stream().collect(Collectors.joining(", "))+
+        System.out.println("Match summaries loaded: " + matchMap.size() + " "
+                + matchMap.keySet().stream().collect(Collectors.joining(", ")) +
                 " for tournament " + tournamentId);
         Map<String, Integer> userTotalPoints = new HashMap<>();
         List<PredictionDTO> evaluatedPredictions = new ArrayList<>();
@@ -79,10 +82,13 @@ public class EvaluationService {
             evaluatedPredictions.add(prediction);
         }
 
+        //save the data correctly
         for (Map.Entry<String, Integer> entry : userTotalPoints.entrySet()) {
             db.collection("tournaments")
                     .document(tournamentId)
-                    .update("participants." + entry.getKey(), entry.getValue());
+                    .collection("participants")
+                    .document(entry.getKey())
+                    .set(Map.of("points", entry.getValue()), SetOptions.merge());
         }
 
         return evaluatedPredictions;
