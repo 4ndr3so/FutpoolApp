@@ -1,4 +1,4 @@
-import { TournamentData } from "@/app/types";
+import { TournamentData } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type TournamentSelectedState = TournamentData | null;

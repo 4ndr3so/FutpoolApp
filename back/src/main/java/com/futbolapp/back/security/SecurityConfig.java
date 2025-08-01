@@ -11,17 +11,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private FirebaseAuthenticationFilter firebaseFilter;
+    private final FirebaseAuthenticationFilter firebaseFilter;
+
+    public SecurityConfig(FirebaseAuthenticationFilter firebaseFilter) {
+        this.firebaseFilter = firebaseFilter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf().disable()
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> {}) // enable CORS using your WebMvcConfigurer
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/secure/**").authenticated()
-                .anyRequest().permitAll()
+                .requestMatchers("/api/public/**", "/error").permitAll()
+                .anyRequest().authenticated()
             )
             .addFilterBefore(firebaseFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

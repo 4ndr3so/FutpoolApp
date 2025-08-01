@@ -11,16 +11,16 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/prediction")
-@CrossOrigin("*")
+/*@CrossOrigin("*") is in the Global CORS Setup*/
 public class EvaluationController {
 
     @Autowired
     private EvaluationService evaluationService;
 
-    @PostMapping("/evaluate/{tournamentId}")
-    public List<PredictionDTO> evaluateAndReturn(@PathVariable String tournamentId)
+    @PostMapping("/evaluate/{tournamentId}/user/{userId}")
+    public List<PredictionDTO> evaluateAndReturn(@PathVariable String tournamentId, @PathVariable String userId)
             throws ExecutionException, InterruptedException {
-        return evaluationService.evaluateAndReturnPredictions(tournamentId);
+        return evaluationService.evaluateAndReturnPredictions(tournamentId, userId);
     }
 
 }

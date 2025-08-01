@@ -1,18 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
-import { TournamentData } from "@/app/types";
-import { fetchTournamentById } from "@/services/api/tournamentApi";
+import { TournamentData } from "@/types";
+import { fetchTournamentById, fetchTournamentsByIds } from "@/services/api/tournamentApi";
 
+
+
+// hooks/useTournamentById.ts
+
+
+export const useTournamentById = (id: string) => {
+  return useQuery<TournamentData>({
+    queryKey: ["tournament", id],
+    queryFn: () => fetchTournamentById(id),
+    enabled: !!id, // avoid running if ID is falsy
+  });
+};
 
 
 export const useTournamentsByIds = (ids: string[]) => {
-
-  
   return useQuery({
-    queryKey: ["tournaments", ids],
-    queryFn: async () => {
-      const tournaments = await Promise.all(ids.map((id) => fetchTournamentById(id)));
-      return tournaments;
-    },
+    queryKey: ["tournamentsByIds", ids],
+    queryFn: () => fetchTournamentsByIds(ids),
     enabled: ids.length > 0,
   });
 };
+

@@ -1,5 +1,5 @@
 "use client";
-import { MatchSummary } from "@/app/types";
+import { MatchSummary } from "@/types";
 import TeamScore from "./TeamScore";
 
 import { useState, useEffect } from "react";

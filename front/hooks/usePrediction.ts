@@ -1,5 +1,5 @@
 // hooks/usePrediction.ts
-import { Prediction } from "@/app/types";
+import { Prediction } from "@/types";
 import { fetchPredictionApi } from "@/services/api/fetchPredictionApi";
 import { useQuery } from "@tanstack/react-query";
 

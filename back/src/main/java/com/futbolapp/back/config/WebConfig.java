@@ -13,10 +13,19 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // Allow all routes
-                        .allowedOrigins("http://localhost:3000") // Frontend origin
+                // 🔓 Public endpoints (no credentials)
+                registry.addMapping("/api/public/**")
+                        .allowedOriginPatterns("*") // ✔ safe now
+                        .allowedMethods("GET", "POST")
+                        .allowedHeaders("*")
+                        .allowCredentials(false); // ✔ no credentials
+
+                // 🔐 Protected endpoints (require credentials)
+                registry.addMapping("/api/**")
+                        .allowedOriginPatterns("http://localhost:3000") // ✔ use patterns instead of origins
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*")
+                        .allowCredentials(true); // ✔ secure access
             }
         };
     }

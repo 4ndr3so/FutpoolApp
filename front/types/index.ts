@@ -83,3 +83,9 @@ export type Prediction = {
     private boolean evaluated;
     private Instant createdAt;
 */
+
+export type Participant = {
+  userId: string;
+  points: number;
+  joinedAt: string; // ISO 8601 format from Java's Instant.toString()
+};
