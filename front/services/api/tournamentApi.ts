@@ -68,3 +68,12 @@ export const fetchScoreboard = async (tournamentId: string): Promise<Participant
   if (!res.ok) throw new Error("Failed to fetch scoreboard");
   return res.json();
 };
+
+
+// services/api/tournamentApi.ts
+
+export const searchTournamentsByName = async (name: string): Promise<TournamentData[]> => {
+  const res = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/tournaments/search?name=${encodeURIComponent(name)}`);
+  if (!res.ok) throw new Error("Failed to fetch tournaments");
+  return res.json();
+};

@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/prediction")
-@CrossOrigin(origins = "*") // Optional for frontend access
+/*@CrossOrigin(origins = "*") // Optional for frontend access*/
 public class PredictionController {
 
     @Autowired

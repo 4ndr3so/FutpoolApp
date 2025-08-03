@@ -28,7 +28,7 @@ export default function Scoreboard({ tournamentId }: Props) {
             .map((participant, index) => (
               <tr key={participant.userId} className="border-b">
                 <td className="p-2">{index + 1}</td>
-                <td className="p-2">{participant.userId}</td>
+                <td className="p-2">{participant.username}</td>
                 <td className="p-2 text-right font-semibold">{participant.points}</td>
               </tr>
             ))}

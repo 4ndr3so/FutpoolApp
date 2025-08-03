@@ -2,10 +2,13 @@
 
 import WelcomComp from "@/components/general/WelcomComp";
 import TournamentGeneCompo from "@/components/tournament/TournamentGeneCompo";
+import JoinRequestManager from "@/components/tournament/JoinRequestManager";
+import SearchTournament from "@/components/tournament/SearchTournament";
 
 import { useAuth } from "@/context/AuthContext";
 import { useTournamentsByIds } from "@/hooks/useTournamentsByIds";
 import { useUserById } from "@/hooks/useUser";
+import { useLogout } from "@/hooks/useLogout";
 
 import { RootState } from "@/store";
 import { setTournaments } from "@/store/slices/tournamentSlice";
@@ -13,44 +16,56 @@ import { setUser } from "@/store/slices/userSlice";
 import { setTournamentSelected } from "@/store/slices/tournamentSelectedSlice";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function HomePageAfterLogin() {
   const router = useRouter();
   const dispatch = useDispatch();
+  
 
   const { user: firebaseUser, loading } = useAuth();
   const user = useSelector((state: RootState) => state.user);
 
-  // 👇 Redirect to login if not authenticated
+  // Control hydration for SSR safety
+  const [isHydrated, setIsHydrated] = useState(false);
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-  }, [loading, user]);
+    setIsHydrated(true);
+  }, []);
 
-  const { data: userProfile, isLoading: userLoading } = useUserById(user?.uid || "");
+  // Redirect after hydration if unauthenticated
+
+  const { data: userProfile, isLoading: userLoading, isError, error } = useUserById(user?.uid || "");
   const tournamentIds = userProfile?.tournamentsParticipant || [];
   const { data: tournaments, isLoading: loadingTournaments } = useTournamentsByIds(tournamentIds);
 
-  // 👇 Update Redux user store when profile is fetched
+  //autenticated
+  useEffect(() => {
+    console.log(error);
+    if (isError && isHydrated) {
+      router.push(`/?error=${encodeURIComponent("Server unreachable")}`);
+    } 
+  }, [isError, isHydrated, userLoading, router, error]);
+
+  // Update Redux user profile
   useEffect(() => {
     if (userProfile) {
       dispatch(setUser({ ...userProfile }));
     }
-  }, [userProfile]);
+  }, [userProfile, dispatch]);
 
-  // 👇 Store tournaments in Redux
+  // Store tournaments in Redux
   useEffect(() => {
     if (tournaments) {
       dispatch(setTournaments(tournaments));
     }
-  }, [tournaments]);
+  }, [tournaments, dispatch]);
 
   const handleCreateTournament = () => {
     router.push("/tournament/new");
   };
+  //return to login if not authenticated
+  
 
   const viewTournament = (tournamentId: string) => {
     const selectedTournament = tournaments?.find(t => t.id === tournamentId);
@@ -59,22 +74,14 @@ export default function HomePageAfterLogin() {
     router.push(`/tournament/details/`);
   };
 
-  if (loading || !user) return <div>Loading...</div>;
+
+  // Prevent rendering until fully hydrated
+  if (!isHydrated || loading || userLoading) return <div>Loading...</div>;
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r shadow-sm p-4">
-        <h2 className="text-xl font-bold text-blue-600 mb-6">FutbolApp</h2>
-        <nav className="flex flex-col gap-4 text-gray-700">
-          <a href="#" className="text-blue-600 font-semibold">Dashboard</a>
-          <a href="#">Tournaments</a>
-          <a href="#">My Forecasts</a>
-          <a href="#">Profile</a>
-          <a href="#">Settings</a>
-          <a href="#" className="mt-auto text-red-500">Log out</a>
-        </nav>
-      </aside>
+    
 
       {/* Main Content */}
       <main className="flex-1 p-6 space-y-6">
@@ -102,18 +109,30 @@ export default function HomePageAfterLogin() {
         {/* Actions */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded shadow">
-            <h3 className="text-md font-semibold mb-2">Create Tournament</h3>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={handleCreateTournament}>
+            <h3 className="text-md font-semibold mb-2">My Tournaments</h3>
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              onClick={handleCreateTournament}
+            >
               + New Tournament
             </button>
+            { 
+
+            }
+            <h3 className="text-lg font-bold mt-6">Join Requests</h3>
+            {
+            tournaments?.map(tournament => (
+              <React.Fragment key={tournament.id}>
+                {tournament.ownerId === user?.uid && (
+                  <JoinRequestManager tournamentId={tournament.id} />
+                )}
+                
+              </React.Fragment>
+            ))}
           </div>
+
           <div className="bg-white p-6 rounded shadow">
-            <h3 className="text-md font-semibold mb-2">Search Tournament</h3>
-            <input
-              type="text"
-              placeholder="Search by code or name..."
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none"
-            />
+            <SearchTournament />
           </div>
         </section>
       </main>

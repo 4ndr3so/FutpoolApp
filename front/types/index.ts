@@ -14,6 +14,7 @@ export type TournamentData = {
   id: string; // Firestore document ID
   name: string;
   ownerId: string;
+  ownerName: string;
   idCompetition: string; // This will be set based on the selected competition
   competitionName: string; // This will be set based on the selected competition
   rules: {
@@ -83,9 +84,26 @@ export type Prediction = {
     private boolean evaluated;
     private Instant createdAt;
 */
-
+/////change add username and email
 export type Participant = {
   userId: string;
   points: number;
+  username: string;
+  email: string;
   joinedAt: string; // ISO 8601 format from Java's Instant.toString()
 };
+
+export interface JoinTournamentRequest {
+  uid: string;
+  username: string;
+  email: string;
+  tournamentId: string;
+  status: "PENDING" | "ACCEPTED" | "REJECTED";
+  timestamp: string; // ISO string or Firebase Timestamp
+}
+
+export interface JoinRequestDTO {
+  uid: string;
+  username: string;
+  email: string;
+}

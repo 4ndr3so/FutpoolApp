@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "@/firebase/firebaseClient";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
-import { useAuth } from "@/context/AuthContext"; // ✅ make sure this is imported at the top
+import { useAuth } from "@/context/AuthContext";
 import { apiFetchUserById, saveUserToBackend } from "@/services/api/userApi";
 import { User } from "../../types";
 
@@ -14,9 +15,43 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
+  ///
+  const [backendReady, setBackendReady] = useState(false);
+
   const router = useRouter();
   const dispatch = useDispatch();
-  const { user: firebaseUser, loading } = useAuth(); // ✅ use hooks always at the top
+  const { user: firebaseUser, loading } = useAuth();
+
+  //scheck the backend is ready
+  useEffect(() => {
+    const checkBackendUser = async () => {
+      if (firebaseUser && isHydrated && !loading) {
+        try {
+          await apiFetchUserById(firebaseUser.uid); // 🔄 confirm backend is up
+          setBackendReady(true); // ✅ allow redirect
+        } catch (err) {
+          console.error("❌ Backend unavailable or user fetch failed", err);
+          sessionStorage.clear();
+          setError("Server unavailable. Please try again later.");
+          await auth.signOut(); // optional: fully reset
+        }
+      }
+    };
+
+    checkBackendUser();
+  }, [firebaseUser, isHydrated, loading]);
+  // ✅ Ensure hydration before accessing client-only features
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  // ✅ Redirect if user is already logged in
+  useEffect(() => {
+    if (firebaseUser && isHydrated && !loading && backendReady) {
+      router.replace("/tournament");
+    }
+  }, [firebaseUser, isHydrated, loading, backendReady]);
 
   const handleAfterLogin = async (user: import("firebase/auth").User) => {
     let existingUser: User | null = null;
@@ -43,7 +78,7 @@ const LoginPage = () => {
     sessionStorage.setItem("user", JSON.stringify(user));
     sessionStorage.setItem("token", idToken);
 
-    router.push("/tournament");
+    router.replace("/tournament");
   };
 
   const handleEmailLogin = async (e: React.FormEvent) => {
@@ -62,10 +97,21 @@ const LoginPage = () => {
     await handleAfterLogin(result.user);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (!isHydrated || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p suppressHydrationWarning className="text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+
   if (firebaseUser) {
-    router.push("/tournament");
-    return <div>Redirecting...</div>;
+    // Redirect is already scheduled in useEffect, so render fallback
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <p className="text-gray-500">Redirecting to dashboard...</p>
+      </div>
+    );
   }
 
   return (
@@ -112,3 +158,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

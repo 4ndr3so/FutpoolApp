@@ -10,5 +10,5 @@ public class TournamentDTO {
     private String id;
     private String idCompetition;
     private TournamentRulesDTO rules;
-    private Map<String, Integer> participants;//chang to int
+    private Map<String, Integer> participants;
 }
