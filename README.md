@@ -73,7 +73,6 @@ The backend should expose endpoints like:
 ## 🧪 Testing
 
 - Unit tests with Jest and React Testing Library (WIP)
-- Firebase Emulator Suite for local development (optional)
 
 ---
 
@@ -82,7 +81,7 @@ The backend should expose endpoints like:
 - [ ] Add user notifications
 - [ ] Add profile editing
 - [ ] Real-time chat inside tournaments
-- [ ] Add loading and error fallback states
+
 
 ---
 
