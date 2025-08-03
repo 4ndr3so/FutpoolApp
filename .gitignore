@@ -56,6 +56,8 @@ Thumbs.db
 /back/.settings/
 /back/hs_err_pid*
 /back/src/main/resources/firebase/*
+/back/src/main/resources/application-secret.properties
+/back/src/main/resources/application.properties
 
 # Maven Wrapper files
 !/back/mvnw
