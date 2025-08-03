@@ -1,6 +1,9 @@
 package com.futbolapp.back.service;
 
+import com.futbolapp.back.dto.JoinRequestDTO;
+import com.futbolapp.back.dto.JoinTournamentRequestDTO;
 import com.futbolapp.back.dto.ParticipantResponse;
+import com.futbolapp.back.dto.TournamentDTO;
 import com.futbolapp.back.dto.TournamentRequest;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
@@ -9,6 +12,8 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
@@ -102,8 +107,7 @@ public class TournamentService {
         return participants;
     }
 
-
-    //the same
+    // the same
     public List<ParticipantResponse> getParticipantsByTournament(String tournamentId) throws Exception {
         Firestore db = FirestoreClient.getFirestore();
 
@@ -127,6 +131,66 @@ public class TournamentService {
                     points != null ? points.intValue() : 0,
                     joinedAt));
         }
+        return result;
+    }
+
+    public List<JoinRequestDTO> getJoinRequests(String tournamentId) throws Exception {
+        Firestore db = FirestoreClient.getFirestore();
+
+        CollectionReference requestsRef = db.collection("tournaments")
+                .document(tournamentId)
+                .collection("pendingRequests");
+
+        List<JoinRequestDTO> response = new ArrayList<>();
+        List<QueryDocumentSnapshot> docs = requestsRef.get().get().getDocuments();
+
+        for (DocumentSnapshot doc : docs) {
+            JoinTournamentRequestDTO req = doc.toObject(JoinTournamentRequestDTO.class);
+
+            if (req == null || req.getUid() == null || req.getUid().trim().isEmpty()) {
+                System.err.println("⚠️ Skipping invalid join request in document: " + doc.getId());
+                continue;
+            }
+
+            DocumentSnapshot userDoc = db.collection("users").document(req.getUid()).get().get();
+            if (userDoc.exists()) {
+                JoinRequestDTO dto = new JoinRequestDTO();
+                dto.setUid(req.getUid());
+                dto.setUsername(userDoc.getString("username"));
+                dto.setEmail(userDoc.getString("email"));
+                response.add(dto);
+            }
+        }
+
+        return response;
+    }
+
+    public List<TournamentRequest> searchTournamentsByName(String name) throws Exception {
+        Firestore db = FirestoreClient.getFirestore();
+        CollectionReference tournamentsRef = db.collection("tournaments");
+
+        Query query = tournamentsRef
+                .whereGreaterThanOrEqualTo("name", name)
+                .whereLessThanOrEqualTo("name", name + "\uf8ff");
+
+        List<QueryDocumentSnapshot> docs = query.get().get().getDocuments();
+        List<TournamentRequest> result = new ArrayList<>();
+
+        for (QueryDocumentSnapshot doc : docs) {
+            TournamentRequest tournament = doc.toObject(TournamentRequest.class);
+            tournament.setId(doc.getId());
+
+            // Fetch owner info from "users" collection
+            DocumentSnapshot userDoc = db.collection("users").document(tournament.getOwnerId()).get().get();
+            if (userDoc.exists()) {
+                tournament.setOwnerName(userDoc.getString("username")); // 👈 Add to DTO
+            } else {
+                tournament.setOwnerName("Unknown");
+            }
+
+            result.add(tournament);
+        }
+
         return result;
     }
 

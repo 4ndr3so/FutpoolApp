@@ -13,5 +13,6 @@ export const useUserById = (userId: string) => {
     queryKey: ["user", userId],
     queryFn: () => apiFetchUserById(userId),
     enabled: !!userId,
+    retry: 2, // 🚨 This is CRITICAL
   });
 };
