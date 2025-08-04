@@ -19,7 +19,7 @@ public class CompetitionService {
     public List<Competition> getActiveCompetitions() {
         List<Competition> all = competitionClient.getAllCompetitions().getCompetitions();
         return all.stream()
-                  .filter(c -> c.getId() == 2011) //filte just one example
+                  //.filter(c -> c.getId() == 2011) //filte just one example
                   .toList();
     }
 }

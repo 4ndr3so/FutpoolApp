@@ -12,6 +12,7 @@ import com.futbolapp.back.dto.MatchDTO;
 import com.futbolapp.back.dto.MatchSummaryDTO;
 import com.futbolapp.back.service.MatchService;
 
+
 import java.util.List;
 
 @RestController
@@ -23,7 +24,10 @@ public class MatchCompetitionController {
 
     @GetMapping
     public List<MatchDTO> getAllMatches() {
+  
+        
         return matchService.getAllMatches();
+        
     }
 
     @GetMapping("/summary")

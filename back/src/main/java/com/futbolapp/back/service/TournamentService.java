@@ -27,8 +27,14 @@ import java.util.Map;
 @Service
 public class TournamentService {
 
+    // always inject the firestore client
+    private final Firestore db;
+    public TournamentService(Firestore db) {
+        this.db = db;
+    }
+
     public Map<String, String> createTournament(TournamentRequest request) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
+    //    Firestore db = FirestoreClient.getFirestore();
 
         Map<String, Object> tournamentData = new HashMap<>();
         tournamentData.put("name", request.getName());
@@ -82,7 +88,7 @@ public class TournamentService {
     }
 
     public Map<String, Object> getTournamentById(String id) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
+       // Firestore db = FirestoreClient.getFirestore();
         DocumentReference docRef = db.collection("tournaments").document(id);
         DocumentSnapshot snapshot = docRef.get().get();
 
@@ -94,7 +100,7 @@ public class TournamentService {
     }
 
     public List<Map<String, Object>> getTournamentParticipants(String tournamentId) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
+      //  Firestore db = FirestoreClient.getFirestore();
         CollectionReference participantsRef = db.collection("tournaments")
                 .document(tournamentId)
                 .collection("participants");
@@ -109,7 +115,7 @@ public class TournamentService {
 
     // the same
     public List<ParticipantResponse> getParticipantsByTournament(String tournamentId) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
+      //  Firestore db = FirestoreClient.getFirestore();
 
         CollectionReference participantsRef = db.collection("tournaments")
                 .document(tournamentId)
@@ -135,7 +141,7 @@ public class TournamentService {
     }
 
     public List<JoinRequestDTO> getJoinRequests(String tournamentId) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
+      //  Firestore db = FirestoreClient.getFirestore();
 
         CollectionReference requestsRef = db.collection("tournaments")
                 .document(tournamentId)
@@ -166,7 +172,7 @@ public class TournamentService {
     }
 
     public List<TournamentRequest> searchTournamentsByName(String name) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
+      //  Firestore db = FirestoreClient.getFirestore();
         CollectionReference tournamentsRef = db.collection("tournaments");
 
         Query query = tournamentsRef

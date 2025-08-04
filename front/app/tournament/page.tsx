@@ -41,7 +41,7 @@ export default function HomePageAfterLogin() {
 
   //autenticated
   useEffect(() => {
-    console.log(error);
+    //console.log(error);
     if (isError && isHydrated) {
       router.push(`/?error=${encodeURIComponent("Server unreachable")}`);
     } 

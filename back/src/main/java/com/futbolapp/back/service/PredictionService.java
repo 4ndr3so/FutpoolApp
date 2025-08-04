@@ -15,11 +15,18 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class PredictionService {
 
+    //always inject the firestore client
+    private final Firestore db;
+
+    public PredictionService(Firestore db) {
+        this.db = db;
+    }
+
     private static final String COLLECTION_NAME = "predictions";
 
     public List<PredictionDTO> getPredictions(String userId, String tournamentId, String matchId)
             throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
+        //Firestore db = FirestoreClient.getFirestore();
         CollectionReference predictionsRef = db.collection(COLLECTION_NAME);
 
         Query query = predictionsRef;
@@ -48,9 +55,9 @@ public class PredictionService {
     }
 
 
-
+    //avoid save predictions if the match is finished, the prediction just can be saved before the match starts
     public String savePrediction(PredictionDTO prediction) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
+        //Firestore db = FirestoreClient.getFirestore();
 
         // ✅ Generate unique document ID
         String docId = prediction.getUserId() + "_" + prediction.getTournamentId() + "_" + prediction.getMatchId();
