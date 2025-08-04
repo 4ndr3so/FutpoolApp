@@ -5,6 +5,8 @@ import com.futbolapp.back.client.MatchAPIClient;
 import com.futbolapp.back.dto.MatchDTO;
 import com.futbolapp.back.dto.MatchResponseDTO;
 import com.futbolapp.back.dto.MatchSummaryDTO;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +21,13 @@ public class MatchService {
         this.matchClient = matchClient;
     }
 
+    @Cacheable("allMatches")
     public List<MatchDTO> getAllMatches() {
         MatchResponseDTO response = matchClient.fetchMatches();
         return response != null ? response.getMatches() : List.of();
     }
 
+    @Cacheable("matchSummaries")
     public List<MatchSummaryDTO> getMatchSummaries() {
         return getAllMatches().stream()
                 .map(match -> new MatchSummaryDTO(

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,14 +19,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 @Component
 public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+            HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
@@ -40,8 +40,12 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
         try {
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(decodedToken.getUid(), null, List.of());
+
+            // Create an authentication object with the user ID and roles
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    decodedToken.getUid(),
+                    null,
+                    List.of(new SimpleGrantedAuthority("ROLE_USER")));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (FirebaseAuthException e) {

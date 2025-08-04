@@ -21,21 +21,25 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.SetOptions;
-import com.google.firebase.cloud.FirestoreClient;
+
 
 @Service
 public class EvaluationService {
 
     private final MatchService matchService;
 
-    public EvaluationService(MatchService matchService) {
+    private final Firestore db;
+
+    // Always inject the Firestore client
+
+    public EvaluationService(MatchService matchService, Firestore db) {
         this.matchService = matchService;
+        this.db = db;
     }
 
     public List<PredictionDTO> evaluateAndReturnPredictions(String tournamentId, String userId)
 
             throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
 
         DocumentSnapshot tournamentSnap = db.collection("tournaments")
                 .document(tournamentId).get().get();
@@ -59,9 +63,9 @@ public class EvaluationService {
         Map<String, MatchSummaryDTO> matchMap = realMatches.stream()
                 .collect(Collectors.toMap(MatchSummaryDTO::getId, m -> m));
 
-        System.out.println("Match summaries loaded: " + matchMap.size() + " "
-                + matchMap.keySet().stream().collect(Collectors.joining(", ")) +
-                " for tournament " + tournamentId);
+        // System.out.println("Match summaries loaded: " + matchMap.size() + " "
+        //         + matchMap.keySet().stream().collect(Collectors.joining(", ")) +
+        //         " for tournament " + tournamentId);
         Map<String, Integer> userTotalPoints = new HashMap<>();
         List<PredictionDTO> evaluatedPredictions = new ArrayList<>();
 
@@ -69,8 +73,9 @@ public class EvaluationService {
             PredictionDTO prediction = doc.toObject(PredictionDTO.class);
             MatchSummaryDTO match = matchMap.get(prediction.getMatchId());
 
-            if (match == null || !"FINISHED".equals(match.getStatus()))
-                continue;
+            //dosen't matter is the match is finished
+           // if (match == null || !"FINISHED".equals(match.getStatus()))
+           //     continue;
 
             int points = calculatePoints(prediction, match, tournament.getRules());
             userTotalPoints.merge(prediction.getUserId(), points, Integer::sum);

@@ -1,6 +1,6 @@
 import React from 'react'
 import TournamentInfo from './TournamentInfo';
-import { useUser } from '@/hooks/useUser';
+
 import { TournamentData } from '@/types';
 
 type Props = {

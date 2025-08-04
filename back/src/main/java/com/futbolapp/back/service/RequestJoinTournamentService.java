@@ -13,6 +13,12 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class RequestJoinTournamentService {
 
+    //allways inject the firestore client
+    private final Firestore db;
+    public RequestJoinTournamentService(Firestore db) {
+        this.db = db;
+    }
+
     private static final String TOURNAMENTS_COLLECTION = "tournaments";
 
     public void requestToJoin(String tournamentId, JoinRequestDTO request)
@@ -28,7 +34,7 @@ public class RequestJoinTournamentService {
             throw new IllegalArgumentException("❌ request.uid is missing.");
         }
 
-        Firestore db = FirestoreClient.getFirestore();
+       // Firestore db = FirestoreClient.getFirestore();
 
         DocumentReference requestDoc = db
                 .collection("tournaments")
@@ -41,7 +47,7 @@ public class RequestJoinTournamentService {
     }
 
     public void acceptRequest(String tournamentId, String userId) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
+       // Firestore db = FirestoreClient.getFirestore();
 
         // 1. Reference to the pending request
         DocumentReference requestDocRef = db.collection(TOURNAMENTS_COLLECTION)
@@ -90,7 +96,7 @@ public class RequestJoinTournamentService {
     }
 
     public void rejectRequest(String tournamentId, String userId) {
-        Firestore db = FirestoreClient.getFirestore();
+       // Firestore db = FirestoreClient.getFirestore();
         db.collection(TOURNAMENTS_COLLECTION)
                 .document(tournamentId)
                 .collection("pendingRequests")
