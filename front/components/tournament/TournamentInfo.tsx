@@ -26,7 +26,7 @@ export default function TournamentInfo({ competitionName, idCompetition, created
         Created At: {fromFirestoreTimestamp(createdAt).toLocaleString()}
       </p>
      
-      <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={() => viewTournament?.(tournamentId || "")}>
+      <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" onClick={() => viewTournament?.(tournamentId || "")}>
         View Details
       </button>
     </div>

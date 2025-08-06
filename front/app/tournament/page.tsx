@@ -98,7 +98,7 @@ export default function HomePageAfterLogin() {
 
         {/* Tournament List */}
         <section className="bg-white p-6 rounded shadow">
-          <h2 className="text-lg font-semibold mb-4">Tournament Participation</h2>
+          <h2 className="text-lg font-semibold mb-4">Tournaments I Joined</h2>
           {loadingTournaments ? (
             <p>Loading tournaments...</p>
           ) : (
@@ -110,15 +110,19 @@ export default function HomePageAfterLogin() {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded shadow">
             <h3 className="text-md font-semibold mb-2">My Tournaments</h3>
-            <button
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            {
+            tournaments && tournaments.length < 1 ? (
+               <button
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
               onClick={handleCreateTournament}
             >
               + New Tournament
             </button>
-            { 
-
-            }
+            ) : (
+              <p>In this demo you just can create one Tournament</p>
+            )}
+           
+      
             <h3 className="text-lg font-bold mt-6">Join Requests</h3>
             {
             tournaments?.map(tournament => (
@@ -132,7 +136,7 @@ export default function HomePageAfterLogin() {
           </div>
 
           <div className="bg-white p-6 rounded shadow">
-            <SearchTournament />
+            <SearchTournament names={tournaments?.map(t => t.name) || [""]} />
           </div>
         </section>
       </main>
