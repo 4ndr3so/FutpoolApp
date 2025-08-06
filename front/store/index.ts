@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["tournamentSelected"], // ✅ only persist this slice
+  whitelist: ["user", "tournaments", "tournamentSelected"], // 
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

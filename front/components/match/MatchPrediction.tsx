@@ -40,9 +40,7 @@ export default function MatchPrediction({
         {status} - {new Date(utcDate).toLocaleDateString()}
       </div>
 
-      <h2 className="text-lg sm:text-xl font-bold mb-4 text-center">
-        Predict the Match
-      </h2>
+     
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12">
         <TeamScore
