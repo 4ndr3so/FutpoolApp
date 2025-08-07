@@ -18,6 +18,10 @@ import { setTournamentSelected } from "@/store/slices/tournamentSelectedSlice";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SkeletonTournamentApp from "@/components/skeleton/SkeletonTournamentApp";
+//skeleton
+
+
 
 export default function HomePageAfterLogin() {
   const router = useRouter();
@@ -76,8 +80,19 @@ export default function HomePageAfterLogin() {
 
 
   // Prevent rendering until fully hydrated
-  if (!isHydrated || loading || userLoading) return <div>Loading...</div>;
-
+if (!isHydrated || loading || userLoading) {
+  return (
+    <div className="space-y-6">
+      <div className="max-w-full bg-white shadow-md rounded-lg p-4 mb-6 mt-4 px-6 mx-8 animate-pulse">
+        <div className="h-6 bg-gray-300 rounded w-1/3 mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+      </div>
+      {[...Array(3)].map((_, idx) => (
+        <SkeletonTournamentApp key={idx} />
+      ))}
+    </div>
+  );
+}
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
