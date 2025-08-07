@@ -1,3 +1,4 @@
+"use client";
 // components/tournament/Scoreboard.tsx
 import { useScoreboard } from "@/hooks/useScoreboard";
 
@@ -10,7 +11,7 @@ export default function Scoreboard({ tournamentId }: Props) {
 
   if (isLoading) return <p>Loading scoreboard...</p>;
   if (isError || !scoreboard) return <p>Failed to load scoreboard.</p>;
-
+  console.log(scoreboard);
   return (
     <div className="bg-white rounded shadow p-4">
       <h3 className="text-lg font-bold mb-4">Scoreboard</h3>
@@ -18,7 +19,7 @@ export default function Scoreboard({ tournamentId }: Props) {
         <thead>
           <tr className="text-gray-600 border-b">
             <th className="p-2">#</th>
-            <th className="p-2">User ID</th>
+            <th className="p-2">User Name</th>
             <th className="p-2 text-right">Points</th>
           </tr>
         </thead>

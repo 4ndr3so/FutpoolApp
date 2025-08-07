@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function HomePageAfterLogin() {
   const router = useRouter();
   const dispatch = useDispatch();
-  
+
 
   const { user: firebaseUser, loading } = useAuth();
   const user = useSelector((state: RootState) => state.user);
@@ -44,7 +44,7 @@ export default function HomePageAfterLogin() {
     //console.log(error);
     if (isError && isHydrated) {
       router.push(`/?error=${encodeURIComponent("Server unreachable")}`);
-    } 
+    }
   }, [isError, isHydrated, userLoading, router, error]);
 
   // Update Redux user profile
@@ -65,7 +65,7 @@ export default function HomePageAfterLogin() {
     router.push("/tournament/new");
   };
   //return to login if not authenticated
-  
+
 
   const viewTournament = (tournamentId: string) => {
     const selectedTournament = tournaments?.find(t => t.id === tournamentId);
@@ -81,7 +81,7 @@ export default function HomePageAfterLogin() {
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-    
+
 
       {/* Main Content */}
       <main className="flex-1 p-6 space-y-6">
@@ -110,29 +110,31 @@ export default function HomePageAfterLogin() {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded shadow">
             <h3 className="text-md font-semibold mb-2">My Tournaments</h3>
+
             {
-            tournaments && tournaments.length < 1 ? (
-               <button
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
-              onClick={handleCreateTournament}
-            >
-              + New Tournament
-            </button>
-            ) : (
-              <p>In this demo you just can create one Tournament</p>
-            )}
-           
-      
+              tournaments && tournaments.length === 1 ? (
+                <p>In this demo you just can create one Tournament</p>
+              ) : (
+
+                <button
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+                  onClick={handleCreateTournament}
+                >
+                  + New Tournament
+                </button>
+              )}
+
+
             <h3 className="text-lg font-bold mt-6">Join Requests</h3>
             {
-            tournaments?.map(tournament => (
-              <React.Fragment key={tournament.id}>
-                {tournament.ownerId === user?.uid && (
-                  <JoinRequestManager tournamentId={tournament.id} />
-                )}
-                
-              </React.Fragment>
-            ))}
+              tournaments?.map(tournament => (
+                <React.Fragment key={tournament.id}>
+                  {tournament.ownerId === user?.uid && (
+                    <JoinRequestManager tournamentId={tournament.id} />
+                  )}
+
+                </React.Fragment>
+              ))}
           </div>
 
           <div className="bg-white p-6 rounded shadow">
