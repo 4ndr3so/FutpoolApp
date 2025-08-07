@@ -10,9 +10,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FirestoreService {
+    // Always inject the Firestore client
+    private final Firestore db;      
+
+    public FirestoreService(Firestore db) {
+        this.db = db;
+    }
 
     public void addData() throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
         DocumentReference docRef = db.collection("users").document("user1");
 
         Map<String, Object> data = new HashMap<>();
@@ -23,7 +28,6 @@ public class FirestoreService {
     }
 
     public String getUser(String userId) throws Exception {
-        Firestore db = FirestoreClient.getFirestore();
         DocumentSnapshot snapshot = db.collection("users").document(userId).get().get();
         return snapshot.exists() ? snapshot.getData().toString() : "User not found";
     }

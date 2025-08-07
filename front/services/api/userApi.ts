@@ -18,13 +18,13 @@ export async function saveUserToBackend(user: {
 
 
   //check if user already exists
-  const idToken = await currentUser.getIdToken(); // 🔐 Get ID token
+  const idToken = await currentUser.getIdToken(); //  Get ID token
 
   const response = await fetchWithAuth(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${idToken}`, // ✅ Add the token here
+      "Authorization": `Bearer ${idToken}`, // Add the token here
     },
     body: JSON.stringify(user),
   });

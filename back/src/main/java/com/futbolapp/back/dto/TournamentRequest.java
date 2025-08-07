@@ -14,7 +14,7 @@ public class TournamentRequest {
     private String competitionName;
     private String name;
     private String ownerId;
-     private String ownerName; // 👈 Add this
+     private String ownerName; // 
     private Map<String, Object> rules;
     //private List<String> participants;
     

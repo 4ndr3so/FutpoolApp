@@ -11,7 +11,7 @@ import { useEffect } from "react";
 
 
 export default function TournamentsPage() {
-   const { user, loading } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   // Check if user is authenticated
   useEffect(() => {
@@ -23,12 +23,12 @@ export default function TournamentsPage() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Tournaments</h1>
-       <ProtectedRoute>
+    <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6 space-y-6">
+      <h2 className="text-2xl font-bold text-center text-gray-800">Tournaments</h2>
 
-          <TournamentForm />
-       </ProtectedRoute>
+      <ProtectedRoute>
+        <TournamentForm />
+      </ProtectedRoute>
     </div>
   );
 }

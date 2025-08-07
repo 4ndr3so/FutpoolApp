@@ -7,8 +7,13 @@ import { RootState } from "@/store";
 import { useSearchTournaments } from "@/hooks/useSearchTournaments";
 import { useJoinTournament } from "@/hooks/useJoinTournament";
 import { TournamentData, JoinTournamentRequest } from "@/types";
+import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
 
-export default function SearchTournament() {
+type Props = {
+  names: string[];
+};
+export default function SearchTournament({ names }: Props) {
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedTerm, setSubmittedTerm] = useState("");
   const [requestedTournaments, setRequestedTournaments] = useState<{ id: string, name: string }[]>([]);
@@ -19,7 +24,7 @@ export default function SearchTournament() {
 
   const handleSendRequest = (tournamentId: string, tournamentName: string) => {
     if (!user?.uid) {
-      alert("You must be logged in.");
+      showErrorToast("You must be logged in.");
       return;
     }
 
@@ -33,7 +38,7 @@ export default function SearchTournament() {
     };
 
     if (!tournamentId || tournamentId.trim() === "") {
-      alert("Tournament ID is missing.");
+      showErrorToast("Tournament ID is missing.");
       return;
     }
 
@@ -43,7 +48,7 @@ export default function SearchTournament() {
       },
       onError: (err: any) => {
         console.error(err);
-        alert("❌ Failed to send join request.");
+        showErrorToast("Failed to send join request.");
       },
     });
   };
@@ -51,6 +56,15 @@ export default function SearchTournament() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if(names.includes(searchTerm.trim())) {
+      showErrorToast("You are already a participant of this tournament.");
+      return;
+    }
+    if(requestedTournaments.find(r => r.name.toLowerCase() === searchTerm.trim().toLowerCase())) {
+      showErrorToast("Wait for the previous request to be processed.");
+      return;
+    }
+      
     setSubmittedTerm(searchTerm.trim());
   };
 
@@ -61,13 +75,13 @@ export default function SearchTournament() {
         <input
           type="text"
           value={searchTerm}
-          placeholder="Search name..."
+          placeholder="Premier1... for testing"
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none"
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
         >
           Search
         </button>
