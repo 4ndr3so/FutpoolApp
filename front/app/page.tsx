@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from 'react-i18next';
 
 // Extend the Window interface to include the feather property.
 // This tells TypeScript that the global 'window' object can have a 'feather' property
@@ -19,6 +20,9 @@ declare global {
 }
 
 export default function PublicPage() {
+  //translation
+   const { t } = useTranslation('common');
+  /////
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
   const { user: firebaseUser, loading } = useAuth();
@@ -43,13 +47,13 @@ export default function PublicPage() {
           {/* Sección Hero */}
           <section className="text-center">
             <div className="max-w-3xl mx-auto">
-              <span className="text-blue-600 font-semibold mb-2 block">LA POLLA FUTBOLERA #1</span>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4 leading-tight">Juega con tus Amigos. Demuestra quién Manda.</h2>
+              <span className="text-blue-600 font-semibold mb-2 block">{t('mainSlogan')}</span>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4 leading-tight">{t('playWithFriends')}</h2>
               <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-                Crea tu polla para la liga o torneo que quieras, invita a tus amigos y compite por la gloria. ¡Totalmente gratis!
+               {t('createYourPolla')}
               </p>
               <a href="#" className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-blue-700 transition-transform hover:scale-105 inline-block shadow-lg">
-                Crear mi Polla Gratis
+                {t('createMyPolla')}
               </a>
             </div>
             <div className="mt-12">
@@ -60,8 +64,8 @@ export default function PublicPage() {
           {/* Sección Cómo Funciona */}
           <section className="py-20 mt-16">
             <div className="text-center mb-12">
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-900">¿Cómo funciona?</h3>
-              <p className="text-lg text-slate-500 mt-2">En 4 simples pasos estarás compitiendo.</p>
+              <h3 className="text-3xl md:text-4xl font-bold text-slate-900">{t('howItWorks')}</h3>
+              <p className="text-lg text-slate-500 mt-2">{t('fourSteps')}</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
               {/* Paso 1 */}
@@ -69,39 +73,39 @@ export default function PublicPage() {
                 <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold">1</span>
                 </div>
-                <h4 className="text-xl font-semibold mb-2">Crea tu Grupo</h4>
-                <p className="text-slate-500">Elige un nombre y una competición. ¡Listo!</p>
+                <h4 className="text-xl font-semibold mb-2">{t('createGroup')}</h4>
+                <p className="text-slate-500">{t('createGroupDesc')}</p>
               </div>
               {/* Paso 2 */}
               <div className="bg-white p-6 rounded-xl shadow-md text-center">
                 <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold">2</span>
                 </div>
-                <h4 className="text-xl font-semibold mb-2">Invita a tus Amigos</h4>
-                <p className="text-slate-500">Comparte un enlace simple para que se unan.</p>
+                <h4 className="text-xl font-semibold mb-2">{t('inviteFriends')}</h4>
+                <p className="text-slate-500">{t('inviteFriendsDesc')}</p>
               </div>
               {/* Paso 3 */}
               <div className="bg-white p-6 rounded-xl shadow-md text-center">
                 <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold">3</span>
                 </div>
-                <h4 className="text-xl font-semibold mb-2">Haz tus Predicciones</h4>
-                <p className="text-slate-500">Ingresa los resultados antes de cada partido.</p>
+                <h4 className="text-xl font-semibold mb-2">{t('makePredictions')}</h4>
+                <p className="text-slate-500">{t('makePredictionsDesc')}</p>
               </div>
               {/* Paso 4 */}
               <div className="bg-white p-6 rounded-xl shadow-md text-center">
                 <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl font-bold">4</span>
                 </div>
-                <h4 className="text-xl font-semibold mb-2">Suma Puntos y Gana</h4>
-                <p className="text-slate-500">El ranking se actualiza en tiempo real. ¡A por la victoria!</p>
+                <h4 className="text-xl font-semibold mb-2">{t('scoreAndWin')}</h4>
+                <p className="text-slate-500">{t('scoreAndWinDesc')}</p>
               </div>
             </div>
           </section>
 
           {/* Footer */}
           <footer className="text-center mt-12 py-8 border-t border-slate-200">
-            <p className="text-slate-500">&copy; 2024 PollaPRO. Todos los derechos reservados.</p>
+            <p className="text-slate-500">&copy; {t('copyright')}</p>
           </footer>
 
         </main>
