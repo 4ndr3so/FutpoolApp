@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Pagination from "@/components/general/Pagination";
 import PredictionButton from "@/components/tournament/PredictionButton";
+import SkeletonTournamentApp from "@/components/skeleton/SkeletonTournamentApp";
 
 const MatchDetails = () => {
   const router = useRouter();
@@ -105,7 +106,19 @@ const MatchDetails = () => {
     });
   };
 
-  if (isLoading) return <p>Loading match data...</p>;
+  if (isLoading) {
+  return (
+    <div className="space-y-6">
+      <div className="max-w-full bg-white shadow-md rounded-lg p-4 mb-6 mt-4 px-6 mx-8 animate-pulse">
+        <div className="h-6 bg-gray-300 rounded w-1/3 mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+      </div>
+      {[...Array(3)].map((_, idx) => (
+        <SkeletonTournamentApp key={idx} />
+      ))}
+    </div>
+  );
+}
 
   if (error || errorPrediction) {
     const errorMessage =
