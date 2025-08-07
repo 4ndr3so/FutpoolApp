@@ -1,4 +1,4 @@
-# ⚽ FutPool- Futbol - Friends Prediction Pools
+# ⚽ FutPool - Futbol - Friends Prediction Pools
 
 A full-stack web application to create, join, and manage football tournaments, predict match scores, and track user performance in real-time.
 
@@ -22,31 +22,17 @@ A full-stack web application to create, join, and manage football tournaments, p
 - 🏆 Create & Join Tournaments
 - 📝 Make Predictions for Matches
 - ✅ Auto-evaluate predictions after match end
+- 💾 Save predictions with visual loading state
 - 📊 Real-time Scoreboard & Stats
-- 📨 Join Request System with Approval Flow
+- 📥 Join Request System with Approval Flow
 - 📱 Mobile-Responsive Design with Burger Menu
+- 🦴 Skeleton Loaders for loading UI states
+- ⚠️ Error Handling with friendly retry prompts
+- 🍞 Toast Notifications for user feedback (react-hot-toast)
+- 📑 Pagination for match listing
 - 🌐 Role-based views (Public Stats, Private Dashboards)
 
----
-
-## 📁 Project Structure
-
-```
-/app/               # Next.js App Router
-  /login
-  /tournament
-/components/        # Reusable UI components
-/context/           # AuthContext (Firebase)
-/hooks/             # Custom React Hooks (Firebase, API)
-/services/          # Backend API services (fetchWithAuth, etc.)
-/store/             # Redux store and slices
-/pages/             # (Optional: legacy routes)
-/spring-api/        # Spring Boot backend source (separate repo or folder)
-```
-
----
-
-
+-
 ## 📡 Backend (Spring Boot)
 
 The backend should expose endpoints like:
@@ -76,14 +62,6 @@ The backend should expose endpoints like:
 
 ---
 
-## ✅ TODO
-
-- [ ] Add user notifications
-- [ ] Add profile editing
-- [ ] Real-time chat inside tournaments
-
-
----
 
 ## 📄 License
 
