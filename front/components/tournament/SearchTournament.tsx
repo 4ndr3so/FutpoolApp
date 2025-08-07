@@ -60,6 +60,10 @@ export default function SearchTournament({ names }: Props) {
       showErrorToast("You are already a participant of this tournament.");
       return;
     }
+    if(requestedTournaments.find(r => r.name.toLowerCase() === searchTerm.trim().toLowerCase())) {
+      showErrorToast("Wait for the previous request to be processed.");
+      return;
+    }
       
     setSubmittedTerm(searchTerm.trim());
   };

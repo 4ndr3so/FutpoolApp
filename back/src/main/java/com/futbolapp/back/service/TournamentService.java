@@ -35,7 +35,7 @@ public class TournamentService {
 
     public Map<String, String> createTournament(TournamentRequest request) throws Exception {
     //    Firestore db = FirestoreClient.getFirestore();
-
+        System.out.println("Creating tournament with request: " + request);
         Map<String, Object> tournamentData = new HashMap<>();
         tournamentData.put("name", request.getName());
         tournamentData.put("ownerId", request.getOwnerId());
@@ -59,6 +59,7 @@ public class TournamentService {
                 participantData.put("userId", userId);
                 participantData.put("points", 0);
                 participantData.put("joinedAt", Instant.now());
+                participantData.put("username", request.getOwnerName()); // 
 
                 db.collection("tournaments")
                         .document(generatedId)
