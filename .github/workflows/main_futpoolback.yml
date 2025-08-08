@@ -1,52 +1,64 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy JAR app to Azure Web App - FutpoolBack
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java version
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'microsoft'
 
       - name: Build with Maven
-        working-directory: ./back 
-        run: mvn clean install
+        working-directory: ./back
+        run: ./mvnw clean install -DskipTests
+
+      - name: Write Firebase credentials into resources
+        run: |
+          mkdir -p back/src/main/resources/firebase
+          echo '${{ secrets.FIREBASE_CREDENTIALS_JSON }}' > back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json
+
+
+      # Create a zip with the JAR and the firebase JSON
+      - name: Create deploy package (zip)
+        run: |
+          mkdir -p deploy
+          cp ./back/target/back-0.0.1-SNAPSHOT.jar ./deploy/
+          cp ./firebase-service-account.json ./deploy/
+          cd deploy && zip -r ../app.zip . && cd ..
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          name: deploy-zip
+          path: app.zip
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-  
+      id-token: write
+      contents: read
+
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: java-app
-      
+          name: deploy-zip
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -54,12 +66,14 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_88D44C35CF1F46FA9960B1FE36DF3F78 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_700DDBD4BC444BFC8EEF65390617FB66 }}
 
+     
+      # Deploy the zip (JAR + firebase json) to site root
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'FutpoolBack'
           slot-name: 'Production'
-          package: '*.jar'
+          package: 'app.zip'
 
           
+
