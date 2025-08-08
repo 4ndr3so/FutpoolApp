@@ -51,7 +51,7 @@ const LoginPage = () => {
     if (firebaseUser && isHydrated && !loading && backendReady) {
       router.replace("/tournament");
     }
-  }, [firebaseUser, isHydrated, loading, backendReady]);
+  }, [firebaseUser, isHydrated, loading, backendReady, router]);
 
   const handleAfterLogin = async (user: import("firebase/auth").User) => {
     let existingUser: User | null = null;
@@ -86,8 +86,9 @@ const LoginPage = () => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       await handleAfterLogin(result.user);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+          const errorMessage = (err as { message: string }).message;
+          setError(errorMessage);
     }
   };
 

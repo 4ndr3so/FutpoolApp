@@ -3,6 +3,7 @@
 
 import { TeamScoreProps } from "@/types";
 import classNames from "classnames";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function TeamScore({
@@ -30,7 +31,10 @@ export default function TeamScore({
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-xs p-3 bg-white border rounded shadow sm:max-w-sm">
       <div className="flex flex-col items-center space-y-2">
-        <img
+        <Image
+        unoptimized
+          width={200}
+          height={100}
           src={flagUrl}
           alt={teamName}
           className="w-10 h-7 object-cover rounded shadow"

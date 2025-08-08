@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <I18nProvider> {/* ✅ Wrap at the top */}
+        <I18nProvider>
           <Providers>
             <PersistGateProvider>
               <ToastProvider />

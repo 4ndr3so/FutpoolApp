@@ -1,9 +1,8 @@
 import React from 'react'
-import MatchPrediction from '../match/MatchPrediction'
+// import MatchPrediction from '../match/MatchPrediction'
 
-type Props = {}
 //this is use?
-export default function asd({}: Props) {
+export default function asd() {
   return (
     <div></div>
   )
