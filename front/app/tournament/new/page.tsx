@@ -3,7 +3,7 @@
 "use client";
 
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import MatchPrediction from "@/components/match/MatchPrediction";
+// import MatchPrediction from "@/components/match/MatchPrediction";
 import TournamentForm from "@/components/tournament/TournamentForm";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ export default function TournamentsPage() {
     if (!loading && !user) {
       router.push("/login");
     }
-  }, [loading, user]);
+  }, [loading, user, router]);
 
   if (loading) return <div>Loading...</div>;
 

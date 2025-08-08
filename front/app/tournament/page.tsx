@@ -8,7 +8,7 @@ import SearchTournament from "@/components/tournament/SearchTournament";
 import { useAuth } from "@/context/AuthContext";
 import { useTournamentsByIds } from "@/hooks/useTournamentsByIds";
 import { useUserById } from "@/hooks/useUser";
-import { useLogout } from "@/hooks/useLogout";
+// import { useLogout } from "@/hooks/useLogout";
 
 import { RootState } from "@/store";
 import { setTournaments } from "@/store/slices/tournamentSlice";

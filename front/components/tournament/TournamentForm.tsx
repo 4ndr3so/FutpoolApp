@@ -30,14 +30,20 @@ const TournamentForm: React.FC = () => {
 
     const mutation = useMutation({
         mutationFn: createTournament,
-        onSuccess: (data) => {
+        onSuccess: () => {
             toast.success("✅ Tournament created!");
             setTimeout(() => {
                 router.push("/tournament");
             }, 1500); // short delay to show toast
         },
-        onError: (error: any) => {
-            toast.error(error.message || "❌ Error creating tournament");
+        onError: (error: unknown) => {
+            const message = function getErrorMessage(err: unknown): string {
+                if (err && typeof err === "object" && "message" in err) {
+                    return (err as { message: string }).message;
+                }
+                return "An unexpected error occurred.";
+            };
+            toast.error(message(error));
         },
     });
 

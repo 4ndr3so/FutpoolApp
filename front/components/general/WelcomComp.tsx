@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react'
 
 type Props = {
@@ -14,7 +15,9 @@ export default function WelcomComp({ name, email, avatarUrl }: Props) {
             <p className="text-sm text-gray-500">Signed in as {email}</p>
           </div>
           <div className="flex items-center gap-4">
-            <img
+            <Image
+              width={40}
+              height={40}
               src={avatarUrl || "https://i.pravatar.cc/40"}
               alt="User Avatar"
               className="w-10 h-10 rounded-full"

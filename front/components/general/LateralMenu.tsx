@@ -2,6 +2,7 @@
 import { RootState } from '@/store';
 import React from 'react'
 import { useSelector } from 'react-redux';
+import Link from 'next/link';
 
 type Props = {
     isMenuOpen: boolean;
@@ -21,19 +22,20 @@ const LateralMenu = ({isMenuOpen}: Props) => {
                 </div>
                 {/* Navegación */}
                 <nav className="mt-6">
-                  <a href="/" className="flex items-center px-6 py-3 text-blue-600 bg-blue-50">
+                 
+                  <Link href="/" className="flex items-center px-6 py-3 text-blue-600 bg-blue-50">
                     <i data-feather="home" className="w-5 h-5"></i>
                     <span className="mx-4 font-semibold">Inicio</span>
-                  </a>
+                  </Link>
                   {user && user.username ?
-                    <a href="/tournament" className="flex items-center px-6 py-3 text-slate-700 hover:bg-gray-100">
+                    <Link href="/tournament" className="flex items-center px-6 py-3 text-slate-700 hover:bg-gray-100">
                     <i data-feather="list" className="w-5 h-5"></i>
                     <span className="mx-4">My tournaments</span>
-                  </a> : (
-                    <a href="/login" className="flex items-center px-6 py-3 text-slate-700 hover:bg-gray-100">
+                  </Link> : (
+                    <Link href="/login" className="flex items-center px-6 py-3 text-slate-700 hover:bg-gray-100">
                     <i data-feather="list" className="w-5 h-5"></i>
                     <span className="mx-4">Login</span>
-                  </a>
+                  </Link>
                   )
                   }
                 </nav>
