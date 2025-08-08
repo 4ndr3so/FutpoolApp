@@ -24,7 +24,8 @@ jobs:
 
       - name: Build with Maven
         working-directory: ./back
-        run: ./mvnw clean install -DskipTests
+        run: chmod +x mvnw && ./mvnw clean install -DskipTests
+        
 
       - name: Write Firebase credentials into resources
         run: |
@@ -37,7 +38,7 @@ jobs:
         run: |
           mkdir -p deploy
           cp ./back/target/back-0.0.1-SNAPSHOT.jar ./deploy/
-          cp ./firebase-service-account.json ./deploy/
+          cp back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json ./deploy/
           cd deploy && zip -r ../app.zip . && cd ..
 
       - name: Upload artifact for deployment job
@@ -76,4 +77,5 @@ jobs:
           package: 'app.zip'
 
           
+
 
