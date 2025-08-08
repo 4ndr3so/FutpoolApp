@@ -31,7 +31,7 @@ jobs:
 
       - name: Build with Maven
         working-directory: ./back
-        run: mvn -B -f pom.xml clean install -DskipTest
+        run: mvn -B -f back/pom.xml clean package -Dmaven.test.skip=true
 
       - name: Create deploy package (zip)
         run: |
@@ -78,6 +78,7 @@ jobs:
           package: 'app.zip'
 
           
+
 
 
 
