@@ -21,24 +21,24 @@ jobs:
         with:
           java-version: '17'
           distribution: 'microsoft'
+          cache: 'maven'
 
-      - name: Build with Maven
-        working-directory: ./back
-        run: chmod +x mvnw && ./mvnw clean install -DskipTests
-        
-
+      # Create Firebase JSON inside resources BEFORE the build so it can be packaged or copied
       - name: Write Firebase credentials into resources
         run: |
-          mkdir -p back/src/main/resources/firebase
-          echo '${{ secrets.FIREBASE_CREDENTIALS_JSON }}' > back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json
+          mkdir -p src/main/resources/firebase
+          printf '%s' "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json
 
+      - name: Build with Maven
+        run: mvn -B -f pom.xml clean install -DskipTests
 
-      # Create a zip with the JAR and the firebase JSON
       - name: Create deploy package (zip)
         run: |
           mkdir -p deploy
-          cp ./back/target/back-0.0.1-SNAPSHOT.jar ./deploy/
-          cp back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json ./deploy/
+          # Copy the built JAR (rename to a stable name)
+          cp ./target/*-SNAPSHOT.jar ./deploy/app.jar
+          # If your app loads Firebase creds from filesystem, include the JSON:
+          cp src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json ./deploy/
           cd deploy && zip -r ../app.zip . && cd ..
 
       - name: Upload artifact for deployment job
@@ -73,9 +73,10 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'FutpoolBack'
-          slot-name: 'Production'
+          # slot-name: 'Production'   # optional; remove if you deploy to the default slot
           package: 'app.zip'
 
           
+
 
 
