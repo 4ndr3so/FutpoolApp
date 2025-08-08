@@ -5,7 +5,7 @@ import MatchPrediction from "@/components/match/MatchPrediction";
 import { useMatchSummary } from "@/hooks/useMatchSum";
 import PointsPerMatch from "@/components/tournament/PointsPerMatch";
 import { useSavePrediction } from "@/hooks/useSavePrediction";
-import classNames from "classnames";
+// import classNames from "classnames";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { MatchSummary } from "@/types";
@@ -15,6 +15,7 @@ import { useAuth } from "@/context/AuthContext";
 import Pagination from "@/components/general/Pagination";
 import PredictionButton from "@/components/tournament/PredictionButton";
 import SkeletonTournamentApp from "@/components/skeleton/SkeletonTournamentApp";
+import { getErrorMessage } from "@/utils/errorIden";
 
 const MatchDetails = () => {
   const router = useRouter();
@@ -41,7 +42,7 @@ const MatchDetails = () => {
   const { data: apiData, isLoading, error } = useMatchSummary(idCompetition);
   const {
     data: predictions,
-    isLoading: loadPredic,
+
     error: errorPrediction,
   } = useEvaluationByTournament(idCompetition, user?.uid || "");
   const { mutate: savePrediction, isPending: isSaving } = useSavePrediction();
@@ -55,7 +56,7 @@ const MatchDetails = () => {
         router.push("/");
       }
     }
-  }, [loading, userAuth, selectedTournament, user]);
+  }, [loading, userAuth, selectedTournament, user,router]);
 
 
 
@@ -107,25 +108,21 @@ const MatchDetails = () => {
   };
 
   if (isLoading) {
-  return (
-    <div className="space-y-6">
-      <div className="max-w-full bg-white shadow-md rounded-lg p-4 mb-6 mt-4 px-6 mx-8 animate-pulse">
-        <div className="h-6 bg-gray-300 rounded w-1/3 mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+    return (
+      <div className="space-y-6">
+        <div className="max-w-full bg-white shadow-md rounded-lg p-4 mb-6 mt-4 px-6 mx-8 animate-pulse">
+          <div className="h-6 bg-gray-300 rounded w-1/3 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+        </div>
+        {[...Array(3)].map((_, idx) => (
+          <SkeletonTournamentApp key={idx} />
+        ))}
       </div>
-      {[...Array(3)].map((_, idx) => (
-        <SkeletonTournamentApp key={idx} />
-      ))}
-    </div>
-  );
-}
+    );
+  }
 
   if (error || errorPrediction) {
-    const errorMessage =
-      (error as any)?.message ||
-      (errorPrediction as any)?.message ||
-      "An unexpected error occurred.";
-
+    const errorMessage = getErrorMessage(error) || getErrorMessage(errorPrediction);
     return (
       <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded max-w-xl mx-auto text-center">
         <h2 className="font-bold text-lg">Something went wrong 😓</h2>

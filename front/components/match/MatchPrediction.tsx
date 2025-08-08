@@ -2,7 +2,7 @@
 
 import { MatchSummary } from "@/types";
 import TeamScore from "./TeamScore";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 type MatchPredictionProps = {
   matchSummary: MatchSummary;

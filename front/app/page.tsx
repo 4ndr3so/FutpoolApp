@@ -1,11 +1,12 @@
 "use client";
-import { useAuth } from "@/context/AuthContext";
-import { RootState } from "@/store";
-import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useTranslation } from 'react-i18next';
+// import { useAuth } from "@/context/AuthContext";
+// import { RootState } from "@/store";
+// import { useRouter } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
+// import {  useState } from "react";
+// import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import Image from "next/image";
 
 // Extend the Window interface to include the feather property.
 // This tells TypeScript that the global 'window' object can have a 'feather' property
@@ -21,14 +22,14 @@ declare global {
 
 export default function PublicPage() {
   //translation
-   const { t } = useTranslation('common');
+   const { t } = useTranslation();
   /////
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
-  const { user: firebaseUser, loading } = useAuth();
-  const user = useSelector((state: RootState) => state.user);
-  const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState(false);
+  // const searchParams = useSearchParams();
+  // const error = searchParams.get("error");
+  // const { user: firebaseUser, loading } = useAuth();
+  // const user = useSelector((state: RootState) => state.user);
+  // const router = useRouter();
+  // const [menuOpen, setMenuOpen] = useState(false);
   /////
   
   /////
@@ -57,7 +58,7 @@ export default function PublicPage() {
               </a>
             </div>
             <div className="mt-12">
-              <img src="https://placehold.co/1200x600/e2e8f0/475569?text=Vista+Previa+de+la+App" alt="Vista previa de la aplicación en un dispositivo" className="rounded-2xl shadow-2xl mx-auto w-full max-w-4xl" />
+              <Image  width={800} height={400} unoptimized src="https://placehold.co/1200x600/e2e8f0/475569?text=Vista+Previa+de+la+App" alt="Vista previa de la aplicación en un dispositivo" className="rounded-2xl shadow-2xl mx-auto w-full max-w-4xl" />
             </div>
           </section>
 

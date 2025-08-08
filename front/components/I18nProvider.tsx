@@ -1,16 +1,20 @@
+//-i18n-provider
 'use client';
 
 import { useEffect, useState } from 'react';
-import '@/lib/i18n';
+import i18n from '@/i18n';
+
+void i18n; // 👈 "Use" it to avoid TS warning
 
 export default function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [loaded, setLoaded] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setLoaded(true);
+    // Delay rendering until after hydration
+    setIsClient(true);
   }, []);
 
-  if (!loaded) return null;
+  if (!isClient) return null;
 
   return <>{children}</>;
 }

@@ -6,12 +6,11 @@ type Props = {
   name?: string;
   idCompetition?: string;
   createdAt: Timestamp;
-  location?: string;
   tournamentId?: string;
   viewTournament?: (id: string) => void;
 }
 
-export default function TournamentInfo({ competitionName, idCompetition, createdAt, location, tournamentId, viewTournament }: Props) {
+export default function TournamentInfo({ competitionName, idCompetition, createdAt, tournamentId, viewTournament }: Props) {
 
   function fromFirestoreTimestamp(timestampObj: { seconds: number, nanos?: number }): Date {
   return new Date(timestampObj.seconds * 1000); // nanos ignored unless needed

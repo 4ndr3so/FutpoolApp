@@ -7,13 +7,13 @@ import { RootState } from "@/store";
 import { useSearchTournaments } from "@/hooks/useSearchTournaments";
 import { useJoinTournament } from "@/hooks/useJoinTournament";
 import { TournamentData, JoinTournamentRequest } from "@/types";
-import { showSuccessToast, showErrorToast } from "@/utils/toastUtils";
+import { showErrorToast } from "@/utils/toastUtils";
 
 type Props = {
   names: string[];
 };
 export default function SearchTournament({ names }: Props) {
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [submittedTerm, setSubmittedTerm] = useState("");
   const [requestedTournaments, setRequestedTournaments] = useState<{ id: string, name: string }[]>([]);
@@ -46,9 +46,14 @@ export default function SearchTournament({ names }: Props) {
       onSuccess: () => {
         setRequestedTournaments(prev => [...prev, { id: tournamentId, name: tournamentName }]);
       },
-      onError: (err: any) => {
-        console.error(err);
-        showErrorToast("Failed to send join request.");
+      onError: (err: unknown) => {
+        const message = function getErrorMessage(err: unknown): string {
+          if (err && typeof err === "object" && "message" in err) {
+            return (err as { message: string }).message;
+          }
+          return "An unexpected error occurred.";
+        };
+        showErrorToast(message(err));
       },
     });
   };
@@ -56,15 +61,15 @@ export default function SearchTournament({ names }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if(names.includes(searchTerm.trim())) {
+    if (names.includes(searchTerm.trim())) {
       showErrorToast("You are already a participant of this tournament.");
       return;
     }
-    if(requestedTournaments.find(r => r.name.toLowerCase() === searchTerm.trim().toLowerCase())) {
+    if (requestedTournaments.find(r => r.name.toLowerCase() === searchTerm.trim().toLowerCase())) {
       showErrorToast("Wait for the previous request to be processed.");
       return;
     }
-      
+
     setSubmittedTerm(searchTerm.trim());
   };
 
