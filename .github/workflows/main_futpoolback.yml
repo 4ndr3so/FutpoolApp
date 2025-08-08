@@ -30,7 +30,8 @@ jobs:
           printf '%s' "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json
 
       - name: Build with Maven
-        run: mvn -B -f pom.xml clean install -DskipTests
+        working-directory: ./back
+        run: mvn -B -f pom.xml clean install -DskipTest
 
       - name: Create deploy package (zip)
         run: |
@@ -77,6 +78,7 @@ jobs:
           package: 'app.zip'
 
           
+
 
 
 
