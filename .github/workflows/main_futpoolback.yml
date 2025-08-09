@@ -58,6 +58,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: deploy-zip
+          path: .
+
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -71,6 +73,7 @@ jobs:
         with:
           app-name: 'FutpoolBack'
           package: 'app.zip'
+
 
 
 
