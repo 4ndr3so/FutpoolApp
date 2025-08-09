@@ -22,10 +22,12 @@ jobs:
           cache: 'maven'
 
       # Put Firebase JSON into the app's resources BEFORE the build
-      - name: Write Firebase credentials into resources
+      - name: Write Firebase credentials (raw JSON)
+        env:
+          FIREBASE_JSON: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
         run: |
           mkdir -p back/src/main/resources/firebase
-          printf '%s' "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json
+          printf '%s' "$FIREBASE_JSON" > back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json
 
       - name: Build with Maven (in back/)
         working-directory: ./back
@@ -58,6 +60,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: deploy-zip
+          path: .
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -71,6 +74,9 @@ jobs:
         with:
           app-name: 'FutpoolBack'
           package: 'app.zip'
+
+
+
 
 
 
