@@ -1,5 +1,5 @@
 # ⚽ [FutPool](https://futpool.netlify.app) - Futbol - Friends Prediction Pools 
-[link](https://futpool.netlify.app)
+[https://futpool.netlify.app/](https://futpool.netlify.app)
 A full-stack web application to create, join, and manage football tournaments, predict match scores, and track user performance in real-time.
 
 ---
