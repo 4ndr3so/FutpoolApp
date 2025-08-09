@@ -1,5 +1,5 @@
-# ⚽ FutPool - Futbol - Friends Prediction Pools
-
+# ⚽ [FutPool](futpool.netlify.app) - Futbol - Friends Prediction Pools 
+[link](futpool.netlify.app)
 A full-stack web application to create, join, and manage football tournaments, predict match scores, and track user performance in real-time.
 
 ---
@@ -44,7 +44,7 @@ flowchart LR
   end
 
   subgraph Netlify
-    F[Next.js Frontend<br/>https://futpool.netlify.app]
+    F[Next.js Frontend - futpool.netlify.app]
   end
 
   subgraph Azure
