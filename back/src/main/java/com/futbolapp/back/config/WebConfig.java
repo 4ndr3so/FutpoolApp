@@ -22,7 +22,11 @@ public class WebConfig {
 
                 // 🔐 Protected endpoints (require credentials)
                 registry.addMapping("/api/**")
-                        .allowedOriginPatterns("http://localhost:3000") // ✔ use patterns instead of origins
+                        .allowedOrigins("https://futpool.netlify.app", "http://localhost:3000")
+                        .allowedOriginPatterns(
+                            "https://*.netlify.app",
+                            "http://localhost:*"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true); // ✔ secure access
