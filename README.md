@@ -37,6 +37,7 @@ A full-stack web application to create, join, and manage football tournaments, p
 ## 🏗️ Infrastructure & Deployment
 
 ### Architecture Diagram
+
 ```mermaid
 flowchart LR
   subgraph Client
@@ -48,9 +49,9 @@ flowchart LR
   end
 
   subgraph Azure
-    B[Azure App Service<br/>Spring Boot API]
+    B[Azure App Service - Spring Boot API]
     S[(App Settings)]
-    W[/wwwroot<br/>app.jar + service-account.json/]
+    W[/wwwroot - app.jar + service-account.json/]
   end
 
   subgraph Firebase
@@ -59,11 +60,16 @@ flowchart LR
     E[(Storage)]
   end
 
+  subgraph ExternalAPI
+    X[Football-Data.org API - Live Scores]
+  end
+
   A <-- HTTPS --> F
   F <-- HTTPS /api --> B
   B <-- Service Account --> C
   B <-- Service Account --> D
   B <-- Service Account --> E
+  B <-- Fetch Live Scores --> X
 
   S --- B
   W --- B
