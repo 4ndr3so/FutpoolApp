@@ -21,13 +21,13 @@ jobs:
           distribution: 'microsoft'
           cache: 'maven'
 
-      # Write Firebase service account (RAW JSON) into resources BEFORE the build
+      # Put Firebase JSON into the app's resources BEFORE the build
       - name: Write Firebase credentials (raw JSON)
+        env:
+          FIREBASE_JSON: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
         run: |
           mkdir -p back/src/main/resources/firebase
-          cat > back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json <<EOF
-${{ secrets.FIREBASE_CREDENTIALS_JSON }}
-EOF
+          printf '%s' "$FIREBASE_JSON" > back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json
 
       - name: Build with Maven (in back/)
         working-directory: ./back
@@ -36,13 +36,11 @@ EOF
       - name: Create deploy package (zip)
         run: |
           mkdir -p deploy
-          # Copy JAR from back/target and give it a stable name
+          # copy jar from back/target and give it a stable name
           cp back/target/*-SNAPSHOT.jar deploy/app.jar
-          # (Optional) also include the JSON next to the jar — not needed for classpath loading, but harmless
+          # include firebase json if your app reads it from filesystem
           cp back/src/main/resources/firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json deploy/
           cd deploy && zip -r ../app.zip . && cd ..
-          echo "Zip contents:"
-          unzip -l app.zip
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -76,6 +74,7 @@ EOF
         with:
           app-name: 'FutpoolBack'
           package: 'app.zip'
+
 
 
 
