@@ -17,28 +17,28 @@ import java.io.InputStream;
 @Configuration
 public class FirestoreConfig {
 
-    @PostConstruct
-    public void initFirebase() {
-        if (FirebaseApp.getApps().isEmpty()) {
-            try (InputStream serviceAccount = getClass()
-                    .getClassLoader()
-                    .getResourceAsStream("firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json")) {
-
-                if (serviceAccount == null) {
-                    throw new IllegalStateException(" Firebase service account file not found!");
-                }
-
-                FirebaseOptions options = FirebaseOptions.builder()
-                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                        .build();
-
-                FirebaseApp.initializeApp(options);
-
-            } catch (IOException e) {
-                throw new RuntimeException(" Failed to initialize Firebase", e);
-            }
-        }
+   @PostConstruct
+public void initFirebase() {
+  if (FirebaseApp.getApps().isEmpty()) {
+    try {
+      InputStream serviceAccount;
+      String path = System.getenv("GOOGLE_APPLICATION_CREDENTIALS");
+      if (path != null && !path.isBlank()) {
+        serviceAccount = new java.io.FileInputStream(path);
+      } else {
+        serviceAccount = getClass().getClassLoader()
+            .getResourceAsStream("firebase/futbolapp-f50da-firebase-adminsdk-fbsvc-a1ab17138e.json");
+      }
+      if (serviceAccount == null) throw new IllegalStateException("Firebase service account not found");
+      FirebaseOptions options = FirebaseOptions.builder()
+          .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+          .build();
+      FirebaseApp.initializeApp(options);
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to initialize Firebase", e);
     }
+  }
+}
 
     @Bean
     public Firestore firestore() {
