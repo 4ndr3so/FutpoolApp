@@ -8,7 +8,7 @@ A full-stack web application to create, join, and manage football tournaments, p
 
 - **Frontend:** [Next.js](https://nextjs.org/) + [TypeScript](https://www.typescriptlang.org/)
 - **Auth & DB:** [Firebase Auth](https://firebase.google.com/products/auth) + [Cloud Firestore](https://firebase.google.com/products/firestore)
-- **Backend:** [Spring Boot (Java)](https://spring.io/projects/spring-boot)
+- **Backend:** [Spring Boot (Java)](https://spring.io/projects/spring-boot) hosted on Azure App Service
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **State Management:** Redux Toolkit
 - **Routing:** Next.js App Router
@@ -32,7 +32,43 @@ A full-stack web application to create, join, and manage football tournaments, p
 - 📑 Pagination for match listing
 - 🌐 Role-based views (Public Stats, Private Dashboards)
 
--
+---
+
+## 🏗️ Infrastructure & Deployment
+
+### Architecture Diagram
+```mermaid
+flowchart LR
+  subgraph Client
+    A[User Browser]
+  end
+
+  subgraph Netlify
+    F[Next.js Frontend<br/>https://futpool.netlify.app]
+  end
+
+  subgraph Azure
+    B[Azure App Service<br/>Spring Boot API]
+    S[(App Settings)]
+    W[/wwwroot<br/>app.jar + service-account.json/]
+  end
+
+  subgraph Firebase
+    C[(Auth)]
+    D[(Firestore)]
+    E[(Storage)]
+  end
+
+  A <-- HTTPS --> F
+  F <-- HTTPS /api --> B
+  B <-- Service Account --> C
+  B <-- Service Account --> D
+  B <-- Service Account --> E
+
+  S --- B
+  W --- B
+```
+
 ## 📡 Backend (Spring Boot)
 
 The backend should expose endpoints like:
