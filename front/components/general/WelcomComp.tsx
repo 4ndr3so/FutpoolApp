@@ -16,6 +16,7 @@ export default function WelcomComp({ name, email, avatarUrl }: Props) {
           </div>
           <div className="flex items-center gap-4">
             <Image
+              unoptimized 
               width={40}
               height={40}
               src={avatarUrl || "https://i.pravatar.cc/40"}

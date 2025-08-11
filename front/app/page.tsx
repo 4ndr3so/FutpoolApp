@@ -53,12 +53,10 @@ export default function PublicPage() {
               <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
                {t('createYourPolla')}
               </p>
-              <a href="#" className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-blue-700 transition-transform hover:scale-105 inline-block shadow-lg">
-                {t('createMyPolla')}
-              </a>
+
             </div>
             <div className="mt-12">
-              <Image  width={800} height={400} unoptimized src="https://placehold.co/1200x600/e2e8f0/475569?text=Vista+Previa+de+la+App" alt="Vista previa de la aplicación en un dispositivo" className="rounded-2xl shadow-2xl mx-auto w-full max-w-4xl" />
+              <Image  width={800} height={400} unoptimized src="/images/fut.jpg" alt="Vista previa de la aplicación en un dispositivo" className="rounded-2xl shadow-2xl mx-auto w-full max-w-4xl" />
             </div>
           </section>
 

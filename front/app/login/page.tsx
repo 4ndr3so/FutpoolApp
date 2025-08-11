@@ -31,7 +31,7 @@ const LoginPage = () => {
           await apiFetchUserById(firebaseUser.uid); // 🔄 confirm backend is up
           setBackendReady(true); // ✅ allow redirect
         } catch (err) {
-          console.error("❌ Backend unavailable or user fetch failed", err);
+          //console.error("❌ Backend unavailable or user fetch failed", err);
           sessionStorage.clear();
           setError("Server unavailable. Please try again later.");
           await auth.signOut(); // optional: fully reset
