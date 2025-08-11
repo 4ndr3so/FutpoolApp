@@ -14,7 +14,7 @@ const LateralMenu = ({isMenuOpen}: Props) => {
   return (
     <aside
                 id="sidebar"
-                className={`bg-white text-slate-800 w-64 fixed inset-y-0 left-0 transform z-40 ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out border-r border-slate-200`}
+                className={`bg-white text-slate-800 w-64 fixed inset-y-0 left-0 transform z-[90] ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out border-r border-slate-200`}
               >
                 {/* Logo en Sidebar */}
                 <div className="flex items-center justify-center p-6 border-b border-slate-200">

@@ -73,7 +73,7 @@ const MatchDetails = () => {
 
   //just for the alpha show one page
   // const totalPages = Math.ceil(enrichedMatches.length / matchesPerPage);
-  const totalPages = 1;
+  const totalPages = 2;
 
   const paginatedMatches = useMemo(() => {
     const start = (currentPage - 1) * matchesPerPage;
