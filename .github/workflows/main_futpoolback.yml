@@ -2,8 +2,17 @@ name: Build and deploy JAR app to Azure Web App - FutpoolBack
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [ main ]
+    paths:
+      - 'back/**'                     # only backend files
+      - 'back/pom.xml'
+      - '.github/workflows/back-deploy.yml'  # run if this workflow changes
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'back/**'
+      - 'back/pom.xml'
+  workflow_dispatch: {}          
 
 jobs:
   build:
@@ -74,6 +83,7 @@ jobs:
         with:
           app-name: 'FutpoolBack'
           package: 'app.zip'
+
 
 
 
